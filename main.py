@@ -2,10 +2,12 @@ from rich.traceback import install
 install(show_locals=True)
 # This will handle the tracebacks and make it look great 
 from rich.console import Console
+console = Console()
 # This will help create a beautiful terminal output layout
 from rich import print
 # As it turns out i was an idiot and did not use console
-from helper import createEmtpySettings
+# Reply to eariler earth, ur dumber, got around to using console
+from helper import createEmtpySettings, getTime, getDate
 import sqlite3
 import os
 import requests
@@ -81,9 +83,24 @@ def main():
     
     # TODO: complete this section to feature the user interface
     if validateConfig():
-        parseConfig()
+        parseConfig() # parse json config into their dictionaries so that 
+        # applications could refer to them later
     else:
+        console.print("FATAL ERROR! Your config.json is malformed!\nPythux will not boot until you fix this error!", style="bold blink red on white")
         exit(1) # return with problematic error
+    
+    # INITIALIZE USER UI!!!
+    fl.log("Initializing user ui")
+    """
+    Core TUI contents!!!
+    DO NOT TOUCH
+
+    BLANK LINE TEMPLATE
+    │                                                             │
+    """
+    console.print("╭─────────────────────────────────────────────────────────────╮", style="#FCBA03")
+    console.print(f"│[#87CEEB]{getDate()} {getTime()}[/#87CEEB]                                     [#37e302]@root[/#37e302]│", style="#FCBA03")
+    console.print(f"│                                                             │", style="#FCBA03")
 def checkIfPassExsists():
     # Try and see if there is a password in etc/psswrd 
     try:
@@ -146,7 +163,6 @@ def parseConfig():
                 musicConfig.append(value) # processing like this to maximize maintainability
         except json.JSONDecodeError:
             fl.error(f"Failed to decode JSON value for key: {key}")
-            # Handle cases where value is not valid JSON if necessary
 
     conn.close()
 
