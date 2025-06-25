@@ -15,6 +15,11 @@ def main():
     """
     The following will be executed on startup
     """
+    if not os.path.exists("logs"):
+        os.makedirs("logs")
+        fl.warn("Logs directory was not found, creating it")
+    else:
+        fl.log("Logs directory is OK")
     if not os.path.exists("root/desktop"):
         os.makedirs("root/desktop")
         fl.warn("root/desktop was not found, creating it")
