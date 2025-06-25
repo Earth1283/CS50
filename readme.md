@@ -4,7 +4,13 @@
 
 This ~~madman~~ CS50 programmer tried to implement Linux with Python 3.12.
 ## Core Ideologies
-The core of this program i to make 
+The core of this program is to make this extremely friendly for the user
+
+My goal is so that anyone who has not yet read the documentation to be **easily** able to read and execute my program
+
+For developers, they should be able to identify how they should extend the functionality of my code via a easy-to-use api endpoint for applications.
+
+The user's privacy will be put in the first place, so please refer to the **Permissions** section to see what permissions the program will query the usre for.
 ## Main Features
 - ✅ Basic Shell Interface
 - ✅ Multi application support
@@ -14,4 +20,18 @@ The core of this program i to make
 - 🔔 Expandable & Usable API for user extendable programs
 - 🔔 Better TUI framework (?)
 ## Core Technologies
-I used `rich` as a library for color rendering of terminal output
+I used `rich` as a library for color rendering of terminal output and coloring it.
+The `bcrypt` library was used to store & hash user passwords in `etc/psswd`
+## Permissions
+Application Developers would have access to the following:
+- Your Internet connection status
+- Your device date and time via DateTime
+
+Application developers will have to **ask for your permission** to have access to the following:
+- Your GeoLocation (we do not have support for that yet)
+- Your User Preferences for other apps
+- Other folders in the `root/insertText` 
+
+Application developers will **NEVER** have access to the following information:
+- Your Password (from `etc/psswrd`)
+- Your directories from other than `root/dektop` and `root/documents`
