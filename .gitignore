@@ -2,3 +2,4 @@
 /logs/
 /minecraft/*
 /etc/psswrd.txt
+/config/config.db

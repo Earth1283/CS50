@@ -1,0 +1,17 @@
+{
+    "general": {
+        "showInternetStatus": true
+    },
+    "weatherConfig": {
+        "enableWeather": false,
+        "openWeatherMapAPIKey": "your API key here"
+    },
+    "musicConfig": {
+        "musicLocation": "root/documents",
+        "musicFileTypes": [
+            "mp3",
+            "ogg",
+            "wav"
+        ]
+    }
+}

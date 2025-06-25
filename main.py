@@ -5,12 +5,13 @@ from rich.console import Console
 # This will help create a beautiful terminal output layout
 from rich import print
 # As it turns out i was an idiot and did not use console
-import requests
-import dotenv
+from helper import createEmtpySettings
+import sqlite3
 import os
 import requests
 from logger import fileLog as fl
 import bcrypt
+import json
 
 def main():
     """
@@ -36,6 +37,13 @@ def main():
         fl.warn("etc directory not found, creating it")
     else:
         fl.log("Etc folder OK")
+    if not os.path.exists("config"):
+        os.makedirs("config")
+        fl.warn("config directory is gone, so might be the configs")
+        fl.warn("Creating a new config with helper.py")
+        createEmtpySettings()
+    else:
+        fl.log("config folder OK")
     if checkIfPassExsists():
         # load the password hash
         with open('etc/psswrd.txt', 'rb') as pswd:
@@ -44,7 +52,7 @@ def main():
             try:
                 userPassword = input("What is your password? Press CONTROL+C to quit\n=> ").strip()
                 if bcrypt.checkpw(userPassword.encode('utf-8'), stored_hash):
-                    print("[red]Password correct.[/red]\n[green]Authenticated[/green]")
+                    print("[green]Password correct.[/green]\n[green]Authenticated[/green]")
                     fl.log("Password check successful")
                     break
                 else:
@@ -70,7 +78,12 @@ def main():
                 with open('etc/psswrd.txt', 'wb') as file:
                     file.write(hashedPassword)
                 break
-    # More code comming
+    
+    # TODO: complete this section to feature the user interface
+    if validateConfig():
+        parseConfig()
+    else:
+        exit(1) # return with problematic error
 def checkIfPassExsists():
     # Try and see if there is a password in etc/psswrd 
     try:
@@ -82,5 +95,60 @@ def checkIfPassExsists():
             return True
     except FileNotFoundError:
         return False
+def validateConfig():
+    config_path = "config/config.json"
+    try:
+        with open(config_path, "r") as f:
+            json.load(f)
+        return True
+    except (json.JSONDecodeError, FileNotFoundError) as e:
+        fl.fatal(f"Config validation failed: {e}")
+        return False
+def parseConfig():
+    config_path = "config/config.json"
+    db_path = "config/config.db"
+
+    general = []
+    weatherConfig = []
+    musicConfig = []
+
+    with open(config_path, "r") as f:
+        config_data = json.load(f)
+
+    conn = sqlite3.connect(db_path)
+    cur = conn.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS config (
+        key TEXT PRIMARY KEY,
+        value TEXT
+    )
+    """)
+
+    for key, value in config_data.items():
+        cur.execute("""
+        INSERT INTO config (key, value) VALUES (?, ?)
+        ON CONFLICT(key) DO UPDATE SET value=excluded.value
+        """, (key, json.dumps(value)))
+    conn.commit()
+
+    cur.execute("SELECT key, value FROM config")
+    rows = cur.fetchall()
+
+    for key, value_json in rows:
+        try:
+            value = json.loads(value_json) # Load value from JSON string
+            if key == "general":
+                general.append(value)
+            elif key == "weatherConfig":
+                weatherConfig.append(value)
+            elif key == "musicConfig":
+                musicConfig.append(value) # processing like this to maximize maintainability
+        except json.JSONDecodeError:
+            fl.error(f"Failed to decode JSON value for key: {key}")
+            # Handle cases where value is not valid JSON if necessary
+
+    conn.close()
+
 if __name__ == "__main__":
     main()
