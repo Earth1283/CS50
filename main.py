@@ -8,6 +8,7 @@ from rich import print
 import requests
 import dotenv
 import os
+import requests
 from logger import fileLog as fl
 import bcrypt
 
