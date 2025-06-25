@@ -6,14 +6,23 @@ from rich.console import Console
 import requests
 import dotenv
 import os
+from logger import fileLog as fl
+import bcrypt
 
 def main():
     """
     The following will be executed on startup
     """
-    root_dir = "root"
-    if not os.path.exists(root_dir):
-        os.makedirs(root_dir)
-        Console().print(f"[green]Created directory:[/green] {root_dir}")
+    if not os.path.exists("root/desktop"):
+        os.makedirs("root/desktop")
+        fl.warn("root/desktop was not found, creating it")
     else:
-        Console().print(f"[yellow]Directory already exists:[/yellow] {root_dir}")
+        fl.log("Desktop is OK")
+    if not os.path.exists("root/documents"):
+        os.makedirs("root/documents")
+        fl.warn("root/documents was not found, creating it")
+    else:
+        fl.log("Documents folder OK")
+
+if __name__ == "__main__":
+    main()
