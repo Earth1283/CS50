@@ -14,6 +14,7 @@ import requests
 from logger import fileLog as fl
 import bcrypt
 import json
+import getpass
 
 def main():
     """
@@ -52,7 +53,7 @@ def main():
             stored_hash = pswd.read().strip()
         while True:
             try:
-                userPassword = input("What is your password? Press CONTROL+C to quit\n=> ").strip()
+                userPassword = getpass.getpass("What is your password? Press CONTROL+C to quit\n=> ").strip()
                 if bcrypt.checkpw(userPassword.encode('utf-8'), stored_hash):
                     print("[green]Password correct.[/green]\n[green]Authenticated[/green]")
                     fl.log("Password check successful")
@@ -67,7 +68,8 @@ def main():
                 exit(0)
     else:
         while True:
-            desiredPassword = input("Please enter your desired password. It must be at least 8 digits and at maximum 72 digits.\nIt is recommended to include [red]special characters[/], [red]number[/], and a [red]mix of upper and lowercase letters[/]\nYour Password is: ")
+            console.print("Please enter your desired password. It must be at least 8 digits and at maximum 72 digits.\nIt is recommended to include [red]special characters[/red], [red]number[/red], and a [red]mix of upper and lowercase letters[/red]")
+            desiredPassword = getpass.getpass("Your Password is: ")
             if len(desiredPassword) < 8:
                 print("[red]Your password does not meet the required safety guidelines of at least 8 chars. Please choose a stronger password.[/red]")
                 continue
@@ -101,6 +103,7 @@ def main():
     console.print("╭─────────────────────────────────────────────────────────────╮", style="#FCBA03")
     console.print(f"│[#87CEEB]{getDate()} {getTime()}[/#87CEEB]                                     [#37e302]@root[/#37e302]│", style="#FCBA03")
     console.print(f"│                                                             │", style="#FCBA03")
+    console.print(f"│                      [#0047AB]Welcome to Pythux[/#0047AB]                      │", style="#FCBA03")
 def checkIfPassExsists():
     # Try and see if there is a password in etc/psswrd 
     try:
