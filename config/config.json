@@ -3,7 +3,7 @@
         "showInternetStatus": true
     },
     "weatherConfig": {
-        "enableWeather": false,
+        "enableWeather": true,
         "openWeatherMapAPIKey": "your API key here"
     },
     "musicConfig": {

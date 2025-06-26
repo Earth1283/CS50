@@ -1,6 +1,6 @@
 .env
 /logs/
-/minecraft/*
 /etc/psswrd.txt
 /config/config.db
 temp.txt
+/config/config.db

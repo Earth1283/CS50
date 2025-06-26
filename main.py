@@ -6,7 +6,6 @@ console = Console()
 # This will help create a beautiful terminal output layout
 from rich import print
 # As it turns out i was an idiot and did not use console
-# Reply to eariler earth, ur dumber, got around to using console
 from helper import createEmtpySettings, getTime, getDate
 import sqlite3
 import os
@@ -104,6 +103,14 @@ def main():
     console.print(f"│[#87CEEB]{getDate()} {getTime()}[/#87CEEB]                                     [#37e302]@root[/#37e302]│", style="#FCBA03")
     console.print(f"│                                                             │", style="#FCBA03")
     console.print(f"│                      [#0047AB]Welcome to Pythux[/#0047AB]                      │", style="#FCBA03")
+    console.print(f"│ Applications:                                               │", style="#FCBA03")
+    console.print(f"│   ╭─────────╮                                               │", style="#FCBA03")
+    console.print(f"│   │   🌤     │                                               │", style="#FCBA03")
+    console.print(f"│   │ Weather │                                               │", style="#FCBA03")
+    console.print(f"│   │   [1]   │                                               │", style="#FCBA03")
+    console.print(f"│   ╰─────────╯                                               │", style="#FCBA03")
+    console.print(f"╰─────────────────────────────────────────────────────────────╯", style="#FCBA03")
+
 def checkIfPassExsists():
     # Try and see if there is a password in etc/psswrd 
     try:
