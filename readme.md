@@ -28,10 +28,10 @@ Application Developers would have access to the following:
 - Your device date and time via DateTime
 
 Application developers will have to **ask for your permission** to have access to the following:
-- Your GeoLocation (we do not have support for that yet)
+- Your GeoLocation (starting support)
 - Your User Preferences for other apps
 - Other folders in the `root/insertText` 
 
-Application developers will **NEVER** have access to the following information:
+Application developers will **NEVER** have access to the following information from our APIs:
 - Your Password (from `etc/psswrd`)
 - Your directories from other than `root/dektop` and `root/documents`
