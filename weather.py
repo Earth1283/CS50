@@ -39,6 +39,7 @@ console.print("╰────────────────────�
 allow = input("Would you want to allow this? (y/n) ")
 if allow == "y" or allow == "yes":
     if apiKey == "your API key here":
+        fl.fatal("FATAL FROM WEATHER: Api key unusable")
         console.print("╭─────────────────────────────────╮", style="#FF1100")
         console.print("│ Unable to retrieve weather info │", style="#FF1100")
         console.print("│  Reason: User did not specify   │", style="#FF1100")
@@ -56,6 +57,7 @@ if allow == "y" or allow == "yes":
         r = requests.get(request_uri)
         rawLocJson = r.json()
         # TODO: call api with geolocation information
+        # TODO: Move this to the application API
         loadedJson = json.loads(rawLocJson)
         lon = loadedJson["coord"]["lon"]
         lat = loadedJson["coord"]["lat"]

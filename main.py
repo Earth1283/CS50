@@ -6,7 +6,7 @@ console = Console()
 # This will help create a beautiful terminal output layout
 from rich import print
 # As it turns out i was an idiot and did not use console
-from helper import createEmtpySettings, getTime, getDate
+from helper import createEmtpySettings, getTime, getDate, printWelcome
 import sqlite3
 import os
 import requests
@@ -92,25 +92,26 @@ def main():
     
     # INITIALIZE USER UI!!!
     fl.log("Initializing user ui")
-    """
-    Core TUI contents!!!
-    DO NOT TOUCH
 
-    BLANK LINE TEMPLATE
-    │                                                             │
-    """
-    console.print("╭─────────────────────────────────────────────────────────────╮", style="#FCBA03")
-    console.print(f"│[#87CEEB]{getDate()} {getTime()}[/#87CEEB]                                     [#37e302]@root[/#37e302]│", style="#FCBA03")
-    console.print(f"│                                                             │", style="#FCBA03")
-    console.print(f"│                      [#0047AB]Welcome to Pythux[/#0047AB]                      │", style="#FCBA03")
-    console.print(f"│ Applications:                                               │", style="#FCBA03")
-    console.print(f"│   ╭─────────╮                                               │", style="#FCBA03")
-    console.print(f"│   │   🌤     │                                               │", style="#FCBA03")
-    console.print(f"│   │ Weather │                                               │", style="#FCBA03")
-    console.print(f"│   │   [1]   │                                               │", style="#FCBA03")
-    console.print(f"│   ╰─────────╯                                               │", style="#FCBA03")
-    console.print(f"╰─────────────────────────────────────────────────────────────╯", style="#FCBA03")
-
+    printWelcome()
+    # Now we need to query the user:
+    while True:
+        applicationList = [1, 2, 3]
+        try:
+            application = input("Enter your desired application\n==> ")
+            if application in applicationList:
+                ...
+            else:
+                console.print("Error, unknown program entered. Please double-check your input.", style="#FCBA03")
+                printWelcome()
+                continue
+        except KeyboardInterrupt:
+            console.print("Exiting Pythux", style="#90EE90")
+            exit(0)
+        except EOFError:
+            console.print("You might have accidentally triggered control+D", style="#90EE90")
+            console.print("If you wish to exit, press control+c", style="#90EE90")
+            continue
 def checkIfPassExsists():
     # Try and see if there is a password in etc/psswrd 
     try:

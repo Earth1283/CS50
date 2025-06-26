@@ -23,8 +23,3 @@ class fileLog:
         date = datetime.now().strftime("%d-%m-%Y")
         with open(f'logs/{date} {time}.log', 'a') as file:
             file.write(f"[!!!FATAL ERROR!!! {time}] {self}\n")
-
-"""
-TODO: add file operations inside the log foler, maybe initialize the directory? DONE
-TODO: Auth users with bcrypt (let's only use the "root" user for now, for simplicity's sake) DONE
-"""
