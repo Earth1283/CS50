@@ -96,15 +96,17 @@ def main():
     printWelcome()
     # Now we need to query the user:
     while True:
-        applicationList = [1, 2, 3]
         try:
             application = input("Enter your desired application\n==> ")
-            if application in applicationList:
-                ...
-            else:
-                console.print("Error, unknown program entered. Please double-check your input.", style="#FCBA03")
-                printWelcome()
-                continue
+            # PATCH: depreciated the applicationLit variable in favor of match...case syntax
+            match application:
+                case "1":
+                    ...
+                case "2":
+                    ...
+                case _:
+                    console.print("[red]Invalid application[/red]")
+                    continue
         except KeyboardInterrupt:
             console.print("\nExiting Pythux", style="#90EE90")
             exit(0)
