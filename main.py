@@ -106,7 +106,7 @@ def main():
                 printWelcome()
                 continue
         except KeyboardInterrupt:
-            console.print("Exiting Pythux", style="#90EE90")
+            console.print("\nExiting Pythux", style="#90EE90")
             exit(0)
         except EOFError:
             console.print("You might have accidentally triggered control+D", style="#90EE90")
