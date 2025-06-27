@@ -8,6 +8,7 @@ console = Console()
 from rich.traceback import install
 install(show_locals=True)
 from logger import fileLog as fl
+from locationServices import getLat, getLon
 
 def getConfigValue(db_path: str, key_name: str) -> dict:
     config_dict = {}
@@ -46,22 +47,11 @@ if allow == "y" or allow == "yes":
         console.print("│        a usable API key         │", style="#FF1100")
         console.print("╰─────────────────────────────────╯", style="#FF1100")
     else:
-        r = requests.get(f'https://www.ipinfo.io')
-        fl.log("Sent request to IPINFO api & got reply")
-        rawJson = r.json()
-        cityName = str(rawJson["city"])
-        stateCode = str(rawJson["region"])
-        countryCode = str(rawJson["country"])
-        fl.log("Getting geolocation from OPEN WEATHER MAP via API KEY")
-        request_uri = f"https://api.openweathermap.org/geo/1.0/direct?q={cityName},{countryCode}&appid={configValue['openWeatherMapAPIKey']}"
-        r = requests.get(request_uri)
-        rawLocJson = r.json()
-        # TODO: call api with geolocation information
-        # TODO: Move this to the application API
-        loadedJson = json.loads(rawLocJson)
-        lon = loadedJson["coord"]["lon"]
-        lat = loadedJson["coord"]["lat"]
-        print(lat, lon)
+        lat = getLat()
+        lon = getLon()
+        # now with this, call the main api
+        r = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={apiKey}&units=metric")
+
 
     #console.print("╭─────────────────────────────────────────────────────────────╮", style="#ADD8E6")
 else:
