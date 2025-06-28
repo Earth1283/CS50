@@ -112,6 +112,9 @@ def main():
                         applicationError("Weather", "Other Unhandled Error")
                 case "2":
                     ...
+                case "exit":
+                    console.print("Exiting Pythux, goodbye!", style="#90EE90")
+                    exit(0)
                 case _:
                     console.print("[red]Invalid application[/red]")
                     printWelcome()

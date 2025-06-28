@@ -5,7 +5,7 @@ from rich import print
 from typing import Optional
 from logger import fileLog as fl
 console = Console()
-def createEmtpySettings():
+def createEmtpySettings() -> None:
     with open('config/config.json', 'w') as file:
         file.write("""{
     "general": {
@@ -24,9 +24,9 @@ def createEmtpySettings():
         ]
     }
 }""")
-def getTime():
+def getTime() -> str:
     return datetime.now().strftime("%H:%M:%S")
-def getDate():
+def getDate() -> str:
     return datetime.now().strftime("%Y-%m-%d")
 
 """
@@ -38,7 +38,7 @@ BLANK LINE TEMPLATE
 """
 def printWelcome(): # Changed to a function to make ref easy
         console.print("╭─────────────────────────────────────────────────────────────╮", style="#FCBA03")
-        console.print(f"│[#87CEEB]{getDate()} {getTime()}[/#87CEEB]                                     [#37e302]@root[/#37e302]│", style="#FCBA03")
+        console.print(f"│[#87CEEB]{getDate()} {getTime()}[/#87CEEB]                            [#37e302]root@localhost[/#37e302]│", style="#FCBA03")
         console.print(f"│                                                             │", style="#FCBA03")
         console.print(f"│                      [#0047AB]Welcome to Pythux[/#0047AB]                      │", style="#FCBA03")
         console.print(f"│ Applications:                                               │", style="#FCBA03")
