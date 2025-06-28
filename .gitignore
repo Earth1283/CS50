@@ -3,4 +3,8 @@
 /etc/psswrd.txt
 /config/config.db
 temp.txt
-__pycache__
+/__pycache__/*
+/.idea/
+undefined.log
+.gitignore
+.DS_Store
