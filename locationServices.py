@@ -1,5 +1,3 @@
-from unittest import case
-
 import requests
 import sqlite3
 import json

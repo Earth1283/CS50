@@ -5,12 +5,13 @@ from rich.console import Console
 console = Console()
 # This will help create a beautiful terminal output layout
 from rich import print
-# As it turns out i was an idiot and did not use console
-from helper import createEmtpySettings, getTime, getDate, printWelcome
+# As it turns out I was an idiot and did not use console
+from helper import createEmtpySettings, getTime, getDate, printWelcome, applicationError
 import sqlite3
 import os
 import requests
 from logger import fileLog as fl
+from weather import weather
 import bcrypt
 import json
 import getpass
@@ -101,11 +102,19 @@ def main():
             # PATCH: depreciated the applicationLit variable in favor of match...case syntax
             match application:
                 case "1":
-                    ...
+                    try:
+                        self = ""
+                        weather.main(self)
+                    except ValueError:
+                        printWelcome() # for some reason this is not in the main loop? idk, printing it again
+                        pass
+                    except:
+                        applicationError("Weather", "Other Unhandled Error")
                 case "2":
                     ...
                 case _:
                     console.print("[red]Invalid application[/red]")
+                    printWelcome()
                     continue
         except KeyboardInterrupt:
             console.print("\nExiting Pythux", style="#90EE90")
@@ -115,10 +124,10 @@ def main():
             console.print("If you wish to exit, press control+c", style="#90EE90")
             continue
 def checkIfPassExsists():
-    # Try and see if there is a password in etc/psswrd 
+    # Try and see if there is a password in etc/psswrd (or if it's empty)
     try:
-        with open('etc/psswrd.txt', 'r') as pswd:
-            password = pswd.read().strip()
+        with open('etc/psswrd.txt', 'r') as passwordReader:
+            password = passwordReader.read().strip() # yes i changed this so that pycharm won't moan
         if len(password) == 0:
             return False
         else:

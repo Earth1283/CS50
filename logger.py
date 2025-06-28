@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
-def initializeFileName():
+filename = None
+def genFileName():
     time = datetime.now().strftime("%H:%M:%S")
     date = datetime.now().strftime("%Y-%m-%d")
     global filename

@@ -9,50 +9,58 @@ from rich.traceback import install
 install(show_locals=True)
 from logger import fileLog as fl
 from locationServices import getLat, getLon, requestPerms
+class weather:
+    def getConfigValue(db_path: str, key_name: str) -> dict:
+        config_dict = {}
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
 
-def getConfigValue(db_path: str, key_name: str) -> dict:
-    config_dict = {}
-    try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
+            cursor.execute("SELECT value FROM config WHERE key = ?", (key_name,))
+            result = cursor.fetchone()
 
-        cursor.execute("SELECT value FROM config WHERE key = ?", (key_name,))
-        result = cursor.fetchone()
+            if result:
+                # Directly parse the JSON string from the first element of the result tuple.
+                config_dict = json.loads(result[0])
 
-        if result:
-            # Directly parse the JSON string from the first element of the result tuple.
-            config_dict = json.loads(result[0])
+        except sqlite3.Error as e:
+            # Handles errors like "no such table" or other database issues.
+            print(f"Database error: {e}")
+        finally:
+            if 'conn' in locals():
+                conn.close()
+        return config_dict
+    def main(self):
+        configValue = weather.getConfigValue("config/config.db", "weatherConfig")
+        # Now let's parse the configValue
+        apiKey = configValue["openWeatherMapAPIKey"]
+        if requestPerms("Weather", "Know your location for weather reports"): # Use new api
+            if apiKey == "your API key here":
+                fl.fatal("FATAL FROM WEATHER: Api key unusable")
+                console.print("╭─────────────────────────────────╮", style="#FF1100")
+                console.print("│ Unable to retrieve weather info │", style="#FF1100")
+                console.print("│  Reason: User did not specify   │", style="#FF1100")
+                console.print("│        a usable API key         │", style="#FF1100")
+                console.print("╰─────────────────────────────────╯", style="#FF1100")
+                raise ValueError("User API Key invalid")
+            else:
+                lat = getLat()
+                lon = getLon()
+                print(f"Your Latitude is {lat} and longitude is {lon}")
+                # now with this, call the main api
+                r = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={apiKey}&units=metric")
+                apiJson = r.json()
+                # We want to check if the key is valid (reject 401)
+                # Then we want to parse the weather info
 
-    except sqlite3.Error as e:
-        # Handles errors like "no such table" or other database issues.
-        print(f"Database error: {e}")
-    finally:
-        if 'conn' in locals():
-            conn.close()
-    return config_dict
 
-configValue = getConfigValue("config/config.db", "weatherConfig")
-# Now let's parse the configValue
-apiKey = configValue["openWeatherMapAPIKey"]
-if requestPerms("Weather", "Know your location for weather reports"): # Use new api
-    if apiKey == "your API key here":
-        fl.fatal("FATAL FROM WEATHER: Api key unusable")
-        console.print("╭─────────────────────────────────╮", style="#FF1100")
-        console.print("│ Unable to retrieve weather info │", style="#FF1100")
-        console.print("│  Reason: User did not specify   │", style="#FF1100")
-        console.print("│        a usable API key         │", style="#FF1100")
-        console.print("╰─────────────────────────────────╯", style="#FF1100")
-    else:
-        lat = getLat()
-        lon = getLon()
-        # now with this, call the main api
-        r = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={apiKey}&units=metric")
+            #console.print("╭─────────────────────────────────────────────────────────────╮", style="#ADD8E6")
+        else:
+            console.print("╭─────────────────────────────────╮", style="#FF1100")
+            console.print("│ Unable to retrieve weather info │", style="#FF1100")
+            console.print("│  Reason: Disallowed IP address  │", style="#FF1100")
+            console.print("│         locator service         │", style="#FF1100")
+            console.print("╰─────────────────────────────────╯", style="#FF1100")
+            raise ValueError("User disallowed location lookup")
 
-
-    #console.print("╭─────────────────────────────────────────────────────────────╮", style="#ADD8E6")
-else:
-    console.print("╭─────────────────────────────────╮", style="#FF1100")
-    console.print("│ Unable to retrieve weather info │", style="#FF1100")
-    console.print("│  Reason: Disallowed IP address  │", style="#FF1100")
-    console.print("│         locator service         │", style="#FF1100")
-    console.print("╰─────────────────────────────────╯", style="#FF1100")
+# Do NOT use if __name__ == "__main__" syntax. this is designed to be run with the main function
