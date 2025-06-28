@@ -106,6 +106,7 @@ def requestPerms(applicationName, reason): # New requestPermission method
     if reason != "":
         print(Panel(f"{applicationName} would like access to your geolocation from your IP address for the following reason:\n{reason}", title="Location Services Access Request", style="#89CFF0"))
         response = input("Would you like to allow this (y/n)? ")
+        fl.log(f"Requesting for location services access from {applicationName} with reason {reason}")
         match response: # THIS CODE IS REACHABLE PYCHARM STOP FREAKING OUT
             case "y":
                 return True
@@ -116,6 +117,7 @@ def requestPerms(applicationName, reason): # New requestPermission method
     else:
         print(Panel(f"{applicationName} would like access to your geolocation from your IP address with no specified purpose. Please proceed with caution.", title="Location Services Access Request", style="#89CFF0"))
         response = input("Would you like to allow this (y/n)? ")
+        fl.warn(f"Application {applicationName} requesting user for location services without a reason")
         match response:
             case "y":
                 return True
