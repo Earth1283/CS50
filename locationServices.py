@@ -1,8 +1,12 @@
+from unittest import case
+
 import requests
 import sqlite3
 import json
 from typing import Optional, Dict, Union
 from logger import fileLog as fl
+from rich import print
+from rich.panel import Panel
 
 
 def _get_api_key() -> Optional[str]:
@@ -97,6 +101,28 @@ def _get_full_geolocation() -> Optional[Dict[str, float]]:
         fl.log(f"Failed to parse location data. A key may be missing or data is malformed: {e}")
         return None
 
+
+def requestPerms(applicationName, reason): # New requestPermission method
+    if reason != "":
+        print(Panel(f"{applicationName} would like access to your geolocation from your IP address for the following reason:\n{reason}", title="Location Services Access Request", style="#89CFF0"))
+        response = input("Would you like to allow this (y/n)? ")
+        match response: # THIS CODE IS REACHABLE PYCHARM STOP FREAKING OUT
+            case "y":
+                return True
+            case "yes":
+                return True
+            case _:
+                return False
+    else:
+        print(Panel(f"{applicationName} would like access to your geolocation from your IP address with no specified purpose. Please proceed with caution.", title="Location Services Access Request", style="#89CFF0"))
+        response = input("Would you like to allow this (y/n)? ")
+        match response:
+            case "y":
+                return True
+            case "yes":
+                return True
+            case _:
+                return False
 
 def getLat() -> Optional[float]:
     # Get lat from ip

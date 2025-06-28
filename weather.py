@@ -8,7 +8,7 @@ console = Console()
 from rich.traceback import install
 install(show_locals=True)
 from logger import fileLog as fl
-from locationServices import getLat, getLon
+from locationServices import getLat, getLon, requestPerms
 
 def getConfigValue(db_path: str, key_name: str) -> dict:
     config_dict = {}
@@ -34,11 +34,7 @@ def getConfigValue(db_path: str, key_name: str) -> dict:
 configValue = getConfigValue("config/config.db", "weatherConfig")
 # Now let's parse the configValue
 apiKey = configValue["openWeatherMapAPIKey"]
-console.print("╭─────────────────────────────────────────────────────────────╮", style="#ADD8E6")
-console.print("│   Weather wants to know your location from your IP address  │", style="#ADD8E6")
-console.print("╰─────────────────────────────────────────────────────────────╯", style="#ADD8E6")
-allow = input("Would you want to allow this? (y/n) ")
-if allow == "y" or allow == "yes":
+if requestPerms("Weather", "Know your location for weather reports"): # Use new api
     if apiKey == "your API key here":
         fl.fatal("FATAL FROM WEATHER: Api key unusable")
         console.print("╭─────────────────────────────────╮", style="#FF1100")
