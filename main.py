@@ -99,7 +99,7 @@ def main():
     while True:
         try:
             application = input("Enter your desired application\n==> ")
-            # PATCH: depreciated the applicationLit variable in favor of match...case syntax
+            # PATCH: depreciated the application variable in favor of match...case syntax
             match application:
                 case "1":
                     try:
