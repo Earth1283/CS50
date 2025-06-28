@@ -3,4 +3,4 @@
 /etc/psswrd.txt
 /config/config.db
 temp.txt
-/config/config.db
+__pycache__
