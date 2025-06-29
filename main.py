@@ -5,7 +5,6 @@ from rich.console import Console
 console = Console()
 # This will help create a beautiful terminal output layout
 from rich import print
-# As it turns out I was an idiot and did not use console
 from helper import createEmtpySettings, getTime, getDate, printWelcome, applicationError
 from utility import checkInternet
 import sqlite3
