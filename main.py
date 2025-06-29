@@ -98,13 +98,14 @@ def main():
     # Now we need to query the user:
     while True:
         try:
-            application = input("Enter your desired application\n==> ")
+            application = int(input("Enter your desired application\n==> "))
             # PATCH: depreciated the application variable in favor of match...case syntax
             match application:
                 case "1":
                     try:
                         self = ""
-                        weather.main(self)
+                        weather.main(self) # type: ignore
+                        # There is no issue vscode
                     except ValueError:
                         printWelcome() # for some reason this is not in the main loop? idk, printing it again
                         pass
@@ -126,6 +127,8 @@ def main():
             console.print("You might have accidentally triggered control+D", style="#90EE90")
             console.print("If you wish to exit, press control+c", style="#90EE90")
             continue
+        except ValueError:
+            console.print("[red]Invalid application[/red]\nPlease input an integer instead of a string.", style="#FF9D25")
 def checkIfPassExsists():
     # Try and see if there is a password in etc/psswrd (or if it's empty)
     try:
