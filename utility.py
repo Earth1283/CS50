@@ -12,5 +12,5 @@ def checkInternet():
     except requests.ConnectionError:
         fl.error("No internet connection detected")
         return False
-def getWeather():
-    ...
+
+# Depreciated the getweather function in favor of the real application
