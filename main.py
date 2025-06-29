@@ -7,6 +7,7 @@ console = Console()
 from rich import print
 # As it turns out I was an idiot and did not use console
 from helper import createEmtpySettings, getTime, getDate, printWelcome, applicationError
+from utility import checkInternet
 import sqlite3
 import os
 import requests
@@ -15,38 +16,21 @@ from weather import weather
 import bcrypt
 import json
 import getpass
+import threading
 
 def main():
     """
     The following will be executed on startup
     """
-    if not os.path.exists("logs"):
-        os.makedirs("logs")
-        fl.warn("Logs directory was not found, creating it")
-    else:
-        fl.log("Logs directory is OK")
-    if not os.path.exists("root/desktop"):
-        os.makedirs("root/desktop")
-        fl.warn("root/desktop was not found, creating it")
-    else:
-        fl.log("Desktop is OK")
-    if not os.path.exists("root/documents"):
-        os.makedirs("root/documents")
-        fl.warn("root/documents was not found, creating it")
-    else:
-        fl.log("Documents folder OK")
-    if not os.path.exists("etc"):
-        os.makedirs("etc")
-        fl.warn("etc directory not found, creating it")
-    else:
-        fl.log("Etc folder OK")
-    if not os.path.exists("config"):
-        os.makedirs("config")
-        fl.warn("config directory is gone, so might be the configs")
-        fl.warn("Creating a new config with helper.py")
-        createEmtpySettings()
-    else:
-        fl.log("config folder OK")
+    # Run checkFileDirs and check internet connection in parallel using threading
+    threads = []
+    t1 = threading.Thread(target=checkFileDirs)
+    t2 = threading.Thread(target=checkConnection)
+    threads.extend([t1, t2])
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
     if checkIfPassExsists():
         # load the password hash
         with open('etc/psswrd.txt', 'rb') as pswd:
@@ -83,7 +67,7 @@ def main():
                     file.write(hashedPassword)
                 break
     
-    # TODO: complete this section to feature the user interface
+ # todo completed, user interface implemented later
     if validateConfig():
         parseConfig() # parse json config into their dictionaries so that 
         # applications could refer to them later
@@ -98,7 +82,7 @@ def main():
     # Now we need to query the user:
     while True:
         try:
-            application = input("Enter your desired application\n==> ")
+            application = input("Enter your desired application\n=> ")
             # PATCH: depreciated the application variable in favor of match...case syntax
             match application:
                 case "1":
@@ -191,6 +175,51 @@ def parseConfig():
             fl.error(f"Failed to decode JSON value for key: {key}")
 
     conn.close()
+
+def checkFileDirs():
+    if not os.path.exists("logs"):
+        os.makedirs("logs")
+        fl.warn("Logs directory was not found, creating it")
+    else:
+        fl.log("Logs directory is OK")
+    if not os.path.exists("root/desktop"):
+        os.makedirs("root/desktop")
+        fl.warn("root/desktop was not found, creating it")
+    else:
+        fl.log("Desktop is OK")
+    if not os.path.exists("root/documents"):
+        os.makedirs("root/documents")
+        fl.warn("root/documents was not found, creating it")
+    else:
+        fl.log("Documents folder OK")
+    if not os.path.exists("etc"):
+        os.makedirs("etc")
+        fl.warn("etc directory not found, creating it")
+    else:
+        fl.log("Etc folder OK")
+    if not os.path.exists("config"):
+        os.makedirs("config")
+        fl.warn("config directory is gone, so might be the configs")
+        fl.warn("Creating a new config with helper.py")
+        createEmtpySettings()
+    else:
+        fl.log("config folder OK")
+
+def checkConnection() -> None:
+    if checkInternet():
+        fl.log("Internet connection is OK")
+    else:
+        fl.error("No internet connection detected")
+        # moan to console
+        noInternet = Text("Your internet connection is not working!\n Weather app will be dysfunctional!", justify="center", style="bold red")
+        noInternetBox = Box(
+            noInternet,
+            title="No Internet Connection",
+            border_style="red",
+            padding=(1, 2),
+            style="bold red on white"
+        )
+        console.print(noInternetBox)
 
 if __name__ == "__main__":
     main()
