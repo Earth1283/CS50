@@ -8,3 +8,5 @@ temp.txt
 undefined.log
 .gitignore
 .DS_Store
+/help/
+undefined

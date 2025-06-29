@@ -4,6 +4,7 @@ from rich.text import Text
 from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
+from rich.align import Align
 from rich import print
 from typing import Optional
 from logger import fileLog as fl
@@ -40,42 +41,45 @@ BLANK LINE TEMPLATE
 │                                                             │
 """
 
-
-
 def printWelcome():
     timeText = Text(f"{getTime()}     {getDate()}", justify="center")
-    timePanel = Panel(timeText, width=80, style="#00FF55")
-    console.print(timePanel)
-    welcomeText = Text(f"{timeText}\n\nWelcome to Pythux!\nHave a nice stay!", justify="center")
-    welcomePanel = Panel(welcomeText, width=80, style="#00d5ff")
-    console.print(welcomePanel)
-    # we are finished with the welcome panel. This will be embedded later within the larger box
+    timePanel = Panel(
+        Align.center(timeText),
+        width=80,
+        style="#00FF55"
+    )
+    console.print(Align.center(timePanel))
 
-    # ROADMAP: Use multiple boxes within a box with the horizontal style
-    # First we will define the text
+    welcomeText = Text(f"{timeText}\n\nWelcome to Pythux!\nHave a nice stay!", justify="center")
+    welcomePanel = Panel(
+        Align.center(welcomeText),
+        width=80,
+        style="#00d5ff"
+    )
+    console.print(Align.center(welcomePanel))
 
     # Little text content
     weatherText = Text("⛅︎\nWeather\n[1]", justify="center")
     fileText = Text("☑︎\nTo-Do List\n[2]", justify="center")
     customText = Text("＋\nUser Installed Apps\n[3]", justify="center")
     # Little panel content
-    weatherBox = Panel(weatherText, style="green", width=24)
-    fileBox = Panel(fileText, style="#00BBFF", width=24)
-    customBox = Panel(customText, style="blue", width=24)
+    weatherBox = Panel(Align.center(weatherText), style="green", width=24)
+    fileBox = Panel(Align.center(fileText), style="#00BBFF", width=24)
+    customBox = Panel(Align.center(customText), style="blue", width=24)
     # Format them
-    columns = Columns([weatherBox, fileBox, customBox])
+    columns = Columns([weatherBox, fileBox, customBox], align="center", expand=False)
     # Final box printout
     finalBox = Panel(
-        columns,
+        Align.center(columns),
         title="[bold]Pythux Applications[/]",
         width=80,
         box=ROUNDED,
         border_style="orange3"
     )
 
-    console.print(finalBox)
+    console.print(Align.center(finalBox))
 
-# TODO: Split this into two parts, top and bottom, top is default options and bottom is for external programs API
+# Previous todo completed
 
 def applicationError(appName: str, error: str, explainError: Optional[str] = None) -> None:
     if explainError:
