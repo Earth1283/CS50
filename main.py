@@ -5,11 +5,13 @@ from rich.console import Console
 console = Console()
 # This will help create a beautiful terminal output layout
 from rich import print
+from rich.text import Text
+from rich.panel import Panel 
+from rich.box import ROUNDED
 from helper import createEmtpySettings, getTime, getDate, printWelcome, applicationError
 from utility import checkInternet
 import sqlite3
 import os
-import requests
 from logger import fileLog as fl
 from weather import weather
 import bcrypt
@@ -72,6 +74,8 @@ def main():
         # applications could refer to them later
     else:
         console.print("FATAL ERROR! Your config.json is malformed!\nPythux will not boot until you fix this error!", style="bold blink red on white")
+        helpPanel = Text("You might want to try the following:\nRestart Pythux with config/config.json deleted (and Pythux will recreate a functional one)", justify="center")
+        console.print(Panel(helpPanel, title="Suggested Actions", border_style="#06A900", box=ROUNDED))
         exit(1) # return with problematic error
     
     # INITIALIZE USER UI!!!
@@ -211,7 +215,7 @@ def checkConnection() -> None:
         fl.error("No internet connection detected")
         # moan to console
         noInternet = Text("Your internet connection is not working!\n Weather app will be dysfunctional!", justify="center", style="bold red")
-        noInternetBox = Box(
+        noInternetBox = Panel(
             noInternet,
             title="No Internet Connection",
             border_style="red",
