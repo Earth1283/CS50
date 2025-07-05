@@ -13,8 +13,10 @@ from rich.panel import Panel
 from rich.text import Text
 from rich.box import ROUNDED
 class weather:
+    @staticmethod
     def getConfigValue(db_path: str, key_name: str) -> dict:
         config_dict = {}
+        conn = None
         try:
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
@@ -28,9 +30,10 @@ class weather:
 
         except sqlite3.Error as e:
             # Handles errors like "no such table" or other database issues.
-            print(f"Database error: {e}")
+            pass
         finally:
-            if 'conn' in locals():
+            if conn is not None:
+                conn.close()
                 conn.close()
         return config_dict
     def main(self):
@@ -39,7 +42,7 @@ class weather:
         apiKey = configValue["openWeatherMapAPIKey"]
         if requestPerms("Weather", "Know your location for weather reports"): # Use new api
             if apiKey == "your API key here":
-                fl.fatal("FATAL FROM WEATHER: Api key unusable")
+                fl.logger(LogLevel.FATAL, "FATAL FROM WEATHER: Api key unusable")
                 moanText = Text("Unable to retrieve weather info\nReason: user did not specify an usable API key", style="#FF1100", justify="center")
                 console.print(
                     Panel(
@@ -59,7 +62,7 @@ class weather:
                 # We want to check if the key is valid (reject 401)
                 # Then we want to parse the weather info
                 if r.status_code == 401:
-                    fl.fatal("FATAL FROM WEATHER: Invalid API key or unauthorized access")
+                    fl.logger(LogLevel.FATAL, "FATAL FROM WEATHER: Invalid API key or unauthorized access")
                     moanText = Text("Unable to retrieve weather info\nReason: Invalid API key or unauthorized access", style="#FF1100", justify="center")
                     console.print(
                         Panel(
