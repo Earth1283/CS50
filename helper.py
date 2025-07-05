@@ -33,14 +33,6 @@ def getTime() -> str:
 def getDate() -> str:
     return datetime.now().strftime("%Y-%m-%d")
 
-"""
-Core TUI contents!!!
-DO NOT TOUCH
-
-BLANK LINE TEMPLATE
-│                                                             │
-"""
-
 def printWelcome():
     timeText = Text(f"{getTime()}     {getDate()}", justify="center")
     timePanel = Panel(
