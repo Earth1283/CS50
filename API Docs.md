@@ -7,9 +7,9 @@ Those marked with a ⚠📝 indicate that there is a breaking change to the API 
 Updated typing in `helper.py`and `main.py` for future maintainability
 ## ⭐ Commit 2f588a7
 # API Methods
-## Logging
+## Logging v1 ⚠⚠DEPRECIATION WARNING⚠⚠
 You can import the logger with the following code:
-```python3
+```python
 from logger import fileLog
 ```
 Note that `fileLog` comes with the following methods:
@@ -17,6 +17,22 @@ Note that `fileLog` comes with the following methods:
 - `filelog.warn("string")` to log a warning to the log file
 - `filelog.error("string")` to log a non-fatal error to the log file
 - `filelog.fatal("string")` to log a fatal error to the log file
+## Logging v2
+The logging v2 API will use a much more human-redable and easy to use logging format, also within the `fileLog` class
+It can be used in the following way:
+```python
+from logger import fileLog as fl, LogLevel
+fl.logger(LogLevel.INFO, "This is an info-level log")
+fl.logger(LogLevel.WARN, "Warning!")
+```
+The logger levels are the same as the v1 API (`info`, `warn`, `error`, and `fatal`).
+
+Please note that the API will return with a `ValueError` if the user uses a wrong logger type, like the following
+```python
+from logger import fileLog as fl, LogLevel
+fl.logger("WARN", "Warning!")
+```
+This will reutrn with `ValueError` so that application developers can catch bugs early on.
 
 ## Location Services
 You can request for the user's location based on their IP addresses (this is inaccurate especially if they are using a VPN or proxy)
@@ -31,7 +47,7 @@ Please note that the `getLon` and the `getLat` methods require a **functional** 
 ## Sysinfo
 You can request system information without the need for a permission request
 You may call the sysInfo api in the following method:
-```python3
+```python
 from sysInfo import getOS, getPythonVersion, getMachine, getProcessor, getPlatform
 # These functions return their respective reponces with the `platform` package
 print(f"Your OS is {getOS()} which is running Pythux on {getPythonVersion()}")
@@ -49,7 +65,7 @@ printBox(
     "This is the content, requred to be a string",
     "Optional TItle Text",
     "Optional Subtitle",
-    "#000000"
+    "#000000",
     "#000000"
 )
 ```
