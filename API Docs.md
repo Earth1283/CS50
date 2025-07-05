@@ -70,3 +70,40 @@ printBox(
 )
 ```
 This will create a box within the terminal, center aligned, and 80 wide. Your text will be centered automatically.
+
+## 📝 App Storage API
+The App Storage API provides a simple, human-friendly way to store and retrieve app-specific key-value data using SQLite. It supports both synchronous and asynchronous lookups, and will raise clear errors if you do something wrong (invalid app name, missing key, etc).
+
+You may use the API like the following:
+```python
+from appStorage import setAppInfo, getAppInfo, deleteAppInfo, listAppKeys, listAppInfo
+# Async versions:
+from appStorage import agetAppInfo, alistAppKeys, alistAppInfo
+```
+
+ **Methods**
+- `setAppInfo(appName, key, value)` — Set or update a value for a key under a specific app. Raises if key is invalid or value is None.
+- `getAppInfo(appName, key)` — Get the value for a key under a specific app. Raises if not found.
+- `deleteAppInfo(appName, key)` — Delete a value for a key under a specific app. Raises if not found.
+- `listAppKeys(appName)` — List all keys that have a value for the given app.
+- `listAppInfo(appName)` — Return all key-value pairs for a given app as a dictionary.
+
+**Async Versions**
+Best for spammy, fast, and frequent API storage and API requests
+- `agetAppInfo(appName, key)` — Async version of `getAppInfo`.
+- `alistAppKeys(appName)` — Async version of `listAppKeys`.
+- `alistAppInfo(appName)` — Async version of `listAppInfo`.
+
+**Error Raising (Moaning)**
+All errors are raised as `AppStorageError` with a helpful message if you do something wrong (invalid app name, missing key, etc).
+
+**Example Code**
+```python
+from appStorage import setAppInfo, getAppInfo, AppStorageError
+
+try:
+    setAppInfo('myApp', 'theme', 'dark')
+    print(getAppInfo('myApp', 'theme'))  # Output: 'dark'
+except AppStorageError as e:
+    print(f"Error: {e}")
+```
