@@ -1,19 +1,19 @@
-from logger import fileLog as fl
+from logger import fileLog as fl, LogLevel
 import platform
 def getOS():
-    fl.log("Getting OS info from API call")
+    fl.logger(LogLevel.INFO, "Getting OS info from API call")
     return platform.system()
 def getPythonVersion():
-    fl.log("Getting python version from API call")
+    fl.logger(LogLevel.INFO, "Getting Python Version info from API call")
     return platform.python_version()
 def getMachine():
-    fl.log("Getting machine type from API call")
+    fl.logger(LogLevel.INFO, "Getting machine info from API call")
     return platform.machine()
 
 def getProcessor():
-    fl.log("Getting processor info from API call")
+    fl.logger(LogLevel.INFO, "Getting processor info from API call")
     return platform.processor()
 
 def getPlatform():
-    fl.log("Getting platform info from API call")
+    fl.logger(LogLevel.INFO, "Getting general platform info from API call")
     return platform.platform()
