@@ -71,8 +71,8 @@ printBox(
 ```
 This will create a box within the terminal, center aligned, and 80 wide. Your text will be centered automatically.
 
-## 📝 App Storage API
-The App Storage API provides a simple, human-friendly way to store and retrieve app-specific key-value data using SQLite. It supports both synchronous and asynchronous lookups, and will raise clear errors if you do something wrong (invalid app name, missing key, etc).
+## App Storage API
+The App Storage API provides a simple, human-friendly way to store and retrieve app-specific key-value data using SQLite stored in `etc/appStorage.db`. It supports both synchronous and asynchronous lookups, and will raise clear errors if you do something wrong (invalid app name, missing key, etc).
 
 You may use the API like the following:
 ```python
