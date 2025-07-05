@@ -84,9 +84,11 @@ def printWelcome():
 
 def applicationError(appName: str, error: str, explainError: Optional[str] = None) -> None:
     if explainError:
+        print()
         print(Panel(f"The application {appName} crashed due to {error}. Further explanation of this error:\n{explainError}", title="Application Crash Report", style="#CE2029"))
         fl.fatal(f"A fatal error occured while executing {appName}. The developer crashed due to {error}. It is recommended to check the logs")
     else:
+        print()
         print(Panel(f"The application {appName} crashed due to {error}.\nAn unhandled error occurred while the application was executing. No further information was given", title="Application Crash Report",
                     style="#CE2029"))
         fl.fatal(f"A fatal error occured while executing {appName}. Check previous logs for more insights")

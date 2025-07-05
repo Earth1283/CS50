@@ -46,7 +46,7 @@ class weather:
                         moanText,
                         title="Error",
                         border_style="#FF1100"
-                    )
+                    ), justify="center"
                 )
                 raise ValueError("User API Key invalid")
             else:
@@ -68,7 +68,7 @@ class weather:
                             border_style="#FF1100",
                             width=80,
                             box=ROUNDED
-                        )
+                        ), justify="center"
                     )
                     raise ValueError("Invalid API Key or unauthorized access")
                 else:
@@ -99,7 +99,7 @@ class weather:
                             border_style="cyan",
                             width=80,
                             box=ROUNDED
-                        )
+                        ), justify="center"
                     )
 
         else:
@@ -110,5 +110,5 @@ class weather:
                 border_style="#FF1100",
                 width=80,
                 box=ROUNDED
-            ))
+            ), justify="center")
             raise ValueError("User disallowed location lookup")
