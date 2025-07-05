@@ -1,5 +1,5 @@
 import requests
-from logger import fileLog as fl
+from logger import fileLog as fl, LogLevel
 def checkInternet():
     """
     This function will run async tasks on startup
@@ -7,10 +7,10 @@ def checkInternet():
     # Test for internet connection
     try:
         requests.get("https://www.google.com", timeout=5)
-        fl.log("Internet connection is OK")
+        fl.logger(LogLevel.INFO, "Internet connection is OK")
         return True
     except requests.ConnectionError:
-        fl.error("No internet connection detected")
+        fl.logger(LogLevel.INFO, "No internet connection detected")
         return False
 
 # Depreciated the getweather function in favor of the real application
