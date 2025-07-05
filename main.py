@@ -38,7 +38,7 @@ def main():
             stored_hash = pswd.read().strip()
         while True:
             try:
-                userPassword = getpass.getpass("What is your password? Press CONTROL+C to quit\n=> ").strip()
+                userPassword = getpass.getpass("What is your password? Press CONTROL+C to quit\n▶ ").strip()
                 if bcrypt.checkpw(userPassword.encode('utf-8'), stored_hash):
                     print("[green]Password correct.[/green]\n[green]Authenticated[/green]")
                     fl.log("Password check successful")
