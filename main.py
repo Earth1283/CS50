@@ -85,7 +85,7 @@ def main():
     # Now we need to query the user:
     while True:
         try:
-            application = input("Enter your desired applicaiton\n▶").strip().lower()
+            application = input("Enter your desired applicaiton\n▶ ").strip().lower()
             # PATCH: depreciated the application variable in favor of match...case syntax
             match application:
                 case "1":
