@@ -13,6 +13,7 @@ from utility import checkInternet
 import sqlite3
 import os
 from logger import fileLog as fl
+from todo import toDo
 from weather import weather
 import bcrypt
 import json
@@ -99,7 +100,11 @@ def main():
                     except:
                         applicationError("Weather", "Other Unhandled Error")
                 case "2":
-                    ...
+                    try:
+                        self = ""
+                        toDo.main(self) # type: ignore
+                    except:
+                        applicationError("ToDo", "Other Unandled Error")
                 case "exit":
                     console.print("Exiting Pythux, goodbye!", style="#90EE90")
                     exit(0)

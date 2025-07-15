@@ -1,5 +1,6 @@
 import requests
 from logger import fileLog as fl, LogLevel
+from api import logge
 def checkInternet():
     """
     This function will run async tasks on startup
