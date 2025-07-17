@@ -23,11 +23,8 @@ class LogLevel(Enum):
     WARN = "WARN"
     ERROR = "ERROR"
     FATAL = "!!!FATAL ERROR!!!"
-    
 
-# Upcomming depreciation of previous API methods
-
-class fileLog:
+class fileLog: # THE FOLLOWING FOUR METHODS WILL BE DEPREICIATED IN FAVOR OF THE LOGLEVEL ENUM
     @staticmethod
     def log(message: str) -> None:
         time = datetime.now().strftime("%H:%M:%S")
