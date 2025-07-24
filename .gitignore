@@ -4,6 +4,7 @@
 /config/config.db
 temp.txt
 /.idea/
+test.py
 undefined.log
 .gitignore
 .DS_Store
