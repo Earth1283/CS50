@@ -6,13 +6,6 @@ from todoHelper import noData, parseTodo, validated
 import json
 from appStorage import setAppInfo, getAppInfo, listAppInfo, AppStorageError
 
-"""
-Project roadmap
-1. Save the files somewhere | used to be in csv, but est we used appStorage things never worked
-2. Read todos from the file (somewhere) | used to be in csv, but est we used appStorage things never worked
-3. Conduct file IO??????
-4. Integrate with the API?????????? | broke the momment implementation was attempted
-"""
 class toDo():
     @staticmethod
     def main():
@@ -36,7 +29,8 @@ class toDo():
         option2 = Text("[2] - Edit a task", justify="center")
         option3 = Text("[3] - Remove a task", justify="center")
         option4 = Text("[4] - Advanced task mainipulation (to be done)", justify="center")
-        console.print(f"{option1}\n{option2}\n{option3}\n{option4}")
+        quit = Text("Note, you can exit with \"Control + C\"")
+        console.print(f"{option1}\n{option2}\n{option3}\n{option4}\n\n{quit}")
         while not validated(
             input("Please enter your desired function\n▶ ")
             ): # oh lol we got a sad face here
