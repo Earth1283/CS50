@@ -1,116 +1,104 @@
 import os
 from typing import Dict, Any, Literal, Union
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# In the far future, we may try to implent this method with Enums for better
-# readability
-"""
-from enum import Enum
-
-class returnDataType(Enum):
-    all = "all"
-    folders = "folders"
-    noSubdirs = "noSubdirs"
-    files = "files"
-    surface = "surface"
-"""
-
-# TODO: add a surface level scanning mode
 def getFileStructure(
     fileDir: str,
-    returnDataMode: Literal['all', 'folders', 'noSubdirs', 'files', 'surface'] = 'all'
+    returnDataMode: Literal['all', 'folders', 'noSubdirs', 'files', 'surface'] = 'all',
+    max_workers: int = None
 ) -> Union[Dict[str, Any], list[str]]:
     """
-    Generates a dictionary or list representing the file structure of a directory.
+    Generates a dictionary or list representing the file structure of a directory
+    using multi-threading for high performance on recursive scans.
 
     Args:
         fileDir (str): The path to the target directory.
         returnDataMode (str): Specifies what to include in the structure.
 
             **'all'** (default): All files and subdirectories, recursively.
-            » Note! This could be extremely resource and time intensive if ran on a large dir
-            » It is advised to use subprocess.run or threading to make the wait less tiring
+            » Note! This mode is now multi-threaded for significantly faster execution
+            (this is still agaonizingly slow due to its recursive nature)
 
             **'folders'**: Only folders and their subdirectories, recursively.
 
-            **'noSubdirs**': Files and folders in the top-level directory only.
+            **'noSubdirs'**: Files and folders in the top-level directory only (no recursion).
 
             **'files'**: Only files, preserving the directory structure, recursively.
 
-            **'surface'**: Only top layer files & folders returned in an array
+            **'surface'**: Only top layer files & folders returned in an array.
+
+        max_workers (int, optional): The maximum number of threads to use for scanning.
+            Defaults to the ThreadPoolExecutor's default (usually min(32, os.cpu_count() + 4)).
+            Fine-tune this for your specific hardware and workload if needed.
 
     Returns:
-        Dict[str, Any]: A nested dictionary representing the file structure.
-        The top-level key is the root directory's name.
-        Files are represented by a value of None.
-        Directories are represented by a nested dictionary of their contents.
+        Union[Dict[str, Any], list[str]]: A nested dictionary or a flat list representing the file structure.
+        In dictionary outputs, the top-level key is the root directory's name, files are `None`,
+        and directories are nested dictionaries.
 
     Raises:
         ValueError: If fileDir is not a valid directory or if returnDataMode is invalid.
     """
+    if not os.path.isdir(fileDir):
+        raise ValueError(f"Error: Provided path '{fileDir}' is not a valid directory.")
 
-    # --- Helper to handle recursive traversal ---
-    def _get_recursive(path: str, mode: Literal['all', 'folders', 'files']) -> Dict[str, Any]:
+    # --- Helper for concurrent recursive traversal ---
+    def _get_recursive_threaded(path: str, mode: str, executor: ThreadPoolExecutor) -> Dict[str, Any]:
         structure = {}
+        future_to_name = {}
         try:
-            # Use os.scandir() for better performance than os.listdir()
             for entry in os.scandir(path):
                 if entry.is_dir(follow_symlinks=False):
-                    # Decide whether to recurse based on the mode
-                    if mode == 'all':
-                        structure[entry.name] = _get_recursive(entry.path, 'all')
-                    elif mode == 'folders':
-                        structure[entry.name] = _get_recursive(entry.path, 'folders')
-                    elif mode == 'files':
-                        # For 'files' mode, only include subdirectories that contain files
-                        subtree = _get_recursive(entry.path, 'files')
-                        if subtree:
-                            structure[entry.name] = subtree
-                elif entry.is_file(follow_symlinks=False):
-                    # Add files only if the mode allows it
-                    if mode in ['all', 'files']:
-                        structure[entry.name] = None
+                    # Submit a new task to the thread pool to scan this subdirectory
+                    future = executor.submit(_get_recursive_threaded, entry.path, mode, executor)
+                    future_to_name[future] = entry.name
+                elif entry.is_file(follow_symlinks=False) and mode in ['all', 'files']:
+                    structure[entry.name] = None
         except OSError:
             # Silently ignore permission errors for inaccessible directories
             pass
-        return structure
 
-    # --- Helper to handle the non-recursive case ---
-    def _get_no_subdirs(path: str) -> Dict[str, Any]:
-        structure = {}
-        try:
-            for entry in os.scandir(path):
-                if entry.is_dir(follow_symlinks=False):
-                    structure[entry.name] = {}  # Indicate a directory but don't traverse
-                elif entry.is_file(follow_symlinks=False):
-                    structure[entry.name] = None
-        except OSError:
-            pass
+        # Collect results from the completed futures (subdirectories)
+        for future in as_completed(future_to_name):
+            entry_name = future_to_name[future]
+            try:
+                subtree = future.result()
+                # For 'files' mode, only include subdirectories that contain files
+                if mode == 'files' and not subtree:
+                    continue
+                structure[entry_name] = subtree
+            except Exception as e:
+                # Optionally log errors from sub-tasks
+                # print(f"Could not process directory {entry_name}: {e}")
+                pass
         return structure
 
     # --- Main Logic ---
-    if not os.path.isdir(fileDir):
-        # Wrong path, moan!
-        raise ValueError(f"Error: Provided path '{fileDir}' is not a valid directory.")
-
-    # Get the clean, absolute name of the root directory for the top-level key
     root_name = os.path.basename(os.path.abspath(fileDir))
-    
-    # Helper for surface mode
-    def _get_surface(path: str) -> list:
-        surface_items = []
-        try:
-            for entry in os.scandir(path):
-                surface_items.append(entry.name)
-        except OSError:
-            pass
-        return sorted(surface_items)  # Sort for consistent output
 
     if returnDataMode == 'surface':
-        return _get_surface(fileDir)
-    elif returnDataMode in ['all', 'folders', 'files']:
-        return {root_name: _get_recursive(fileDir, returnDataMode)}  # type: ignore
-    elif returnDataMode == 'noSubdirs':
-        return {root_name: _get_no_subdirs(fileDir)}
-    else:
-        # If we get here, the user probably didn't enter a right option
-        raise ValueError(f"Error: Invalid returnDataMode '{returnDataMode}'. Valid options are 'all', 'folders', 'noSubdirs', 'files', 'surface'.")
+        try:
+            # A simple list comprehension is fastest for this non-recursive mode.
+            return sorted([entry.name for entry in os.scandir(fileDir)])
+        except OSError:
+            return []
+
+    if returnDataMode == 'noSubdirs':
+        structure = {}
+        try:
+            for entry in os.scandir(fileDir):
+                structure[entry.name] = {} if entry.is_dir(follow_symlinks=False) else None
+        except OSError:
+            pass
+        return {root_name: structure}
+
+    if returnDataMode in ['all', 'folders', 'files']:
+        # Create a thread pool and start the concurrent scan
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # The initial call is submitted to the pool
+            future = executor.submit(_get_recursive_threaded, fileDir, returnDataMode, executor)
+            result_tree = future.result()
+        return {root_name: result_tree}
+
+    # If we get here, the user probably didn't enter a valid option
+    raise ValueError(f"Error: Invalid returnDataMode '{returnDataMode}'. Valid options are 'all', 'folders', 'noSubdirs', 'files', 'surface'.")
