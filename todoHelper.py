@@ -9,10 +9,12 @@ install(show_locals=True)
 console = Console()
 from rich.text import Text
 import csv
+
 def noData():
     noDataText = Text("There is currently no data in the todo file!", justify="center")
     noDataPanel = Panel(noDataText, style="#FFAE00", width=80, padding=(1, 1), title="Warning!")
     console.print(noDataPanel)
+    
 def parseTodo():
     with open('root/documents/todo.csv', 'r') as file:
         reader = csv.DictReader(file)

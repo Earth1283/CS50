@@ -97,14 +97,14 @@ def main():
                     except ValueError:
                         printWelcome() # for some reason this is not in the main loop? idk, printing it again
                         pass
-                    except:
-                        applicationError("Weather", "Other Unhandled Error")
+                    except Exception as e:
+                        applicationError("Weather", f"Other Unhandled Error: {type(e).__name__}: {e}")
                 case "2":
                     try:
                         self = ""
-                        toDo.main(self) # type: ignore
-                    except:
-                        applicationError("ToDo", "Other Unandled Error")
+                        toDo.main() # type: ignore
+                    except Exception as e:
+                        applicationError("ToDo", f"Other Unhandled Error: {type(e).__name__}: {e}")
                 case "exit":
                     console.print("Exiting Pythux, goodbye!", style="#90EE90")
                     exit(0)
@@ -190,6 +190,9 @@ def checkFileDirs():
         fl.warn("Logs directory was not found, creating it")
     else:
         fl.log("Logs directory is OK")
+    if not os.path.exists("memory"):
+        os.makedirs("memory")
+        # no need for logging / if else syntax, this is for ipc or stuff like that
     if not os.path.exists("root/desktop"):
         os.makedirs("root/desktop")
         fl.warn("root/desktop was not found, creating it")
@@ -212,6 +215,18 @@ def checkFileDirs():
         createEmtpySettings()
     else:
         fl.log("config folder OK")
+    if not os.path.exists("applications"):
+        os.makedirs("applications")
+        fl.warn("Application directory gon missing")
+    else:
+        fl.log("Applications folder (looks) OK")
+    # now we can check the files needed for some hard-coded applications
+    if not os.path.exists("root/documents/todo.csv"):
+        with open("root/documents/todo.csv", "w") as f:
+            f.write("taskName,taskInfo,status\n")
+        fl.warn("Todo CSV file not found, creating it")
+    else:
+        fl.log("Todo CSV file is OK")
 
 def checkConnection() -> None:
     if checkInternet():

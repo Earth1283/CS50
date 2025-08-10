@@ -1,3 +1,4 @@
+root/documents/todo.csv
 .env
 /logs/
 /etc/psswrd.txt
@@ -10,7 +11,9 @@ undefined.log
 .DS_Store
 /help/
 undefined
-__pycache__/
+/__pycache__
 /testing/
 testing.py
 /etc/
+/memory
+/applications

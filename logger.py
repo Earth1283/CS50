@@ -17,13 +17,11 @@ time = datetime.now().strftime("%H-%M-%S")
 date = datetime.now().strftime("%Y-%m-%d")
 filename = f"logs/{date} {time}.log"
 
-
 class LogLevel(Enum):
     INFO = "INFO"
     WARN = "WARN"
     ERROR = "ERROR"
     FATAL = "!!!FATAL ERROR!!!"
-    
 
 # Upcomming depreciation of previous API methods
 

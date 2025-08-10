@@ -14,7 +14,8 @@ Project roadmap
 4. Integrate with the API?????????? | broke the momment implementation was attempted
 """
 class toDo():
-    def main(self):
+    @staticmethod
+    def main():
         initialText = Text("Hello!\nWelcome to Pythux's dedicated todo list!", justify="center", style="#FFB300")
         # Now we need to read from the API
         try:
@@ -31,3 +32,5 @@ class toDo():
         else:
             # Optionally, pass todoData to parseTodo if you refactor it to accept data
             parseTodo()
+def initialize():
+    toDo.main() # ig that's how you do it
