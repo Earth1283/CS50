@@ -55,7 +55,7 @@ def main():
     else:
         while True:
             console.print("Please enter your desired password. It must be at least 8 digits and at maximum 72 digits.\nIt is recommended to include [red]special characters[/red], [red]number[/red], and a [red]mix of upper and lowercase letters[/red]")
-            dontWorry = Text("[#08A1FC]Do not worry if you cannot see any of your typed text; this is for your privacy! The terminal can still read your input.[/#08A1FC]", justify="center")
+            dontWorry = Text("Do not worry if you cannot see any of your typed text; this is for your privacy! The terminal can still read your input.", justify="center", style="08A1FC")
             console.print(dontWorry)
             desiredPassword = getpass.getpass("Your Password is: ")
             if len(desiredPassword) < 8:
