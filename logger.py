@@ -11,7 +11,7 @@ def genFileName():
     # Ensure logs directory exists
     os.makedirs("logs", exist_ok=True)
 
-# Generate filename immediately so it's never undefined
+# Generates the filename on import so it's never undefined
 os.makedirs("logs", exist_ok=True)
 time = datetime.now().strftime("%H-%M-%S")
 date = datetime.now().strftime("%Y-%m-%d")
