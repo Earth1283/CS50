@@ -19,6 +19,8 @@ import getpass
 import threading
 
 def main():
+    # Before we begin, let's clear the user's console
+    console.clear()
     """
     The following will be executed on startup
     """
@@ -79,7 +81,7 @@ def main():
     
     # INITIALIZE USER UI!!!
     fl.log("Initializing user ui")
-
+    console.clear() # clear the user's console again
     printWelcome()
     # Now we need to query the user:
     while True:
@@ -93,6 +95,7 @@ def main():
                         weather.main(self) # type: ignore
                         # There is no issue vscode
                     except ValueError:
+                        console.clear()
                         printWelcome() # for some reason this is not in the main loop? idk, printing it again
                         pass
                     except Exception as e:
@@ -108,6 +111,7 @@ def main():
                     exit(0)
                 case _:
                     console.print("[red]Invalid application[/red]")
+                    console.clear()
                     printWelcome()
                     continue
         except KeyboardInterrupt:
