@@ -11,7 +11,7 @@ from rich.text import Text
 import csv
 
 def noData():
-    noDataText = Text("There is currently no data in the todo file!", justify="center")
+    noDataText = Text("There is currently no data in the todo file!\nRelaunch this application to view an empty table", justify="center")
     noDataPanel = Panel(noDataText, style="#FFAE00", width=80, padding=(1, 1), title="Warning!")
     console.print(noDataPanel)
     
@@ -47,3 +47,16 @@ def parseTodo():
     )
     bigBox = Align.center(bigBox)
     console.print(bigBox)
+
+def validated(userInput):
+    match userInput:
+        case 1:
+            return True
+        case 2:
+            return True
+        case 3:
+            return True
+        case 4:
+            return True
+        case _:
+            return False

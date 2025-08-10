@@ -1,9 +1,7 @@
 from rich.traceback import install
 install(show_locals=True)
-# This will handle the tracebacks and make it look great 
 from rich.console import Console
 console = Console()
-# This will help create a beautiful terminal output layout
 from rich import print
 from rich.text import Text
 from rich.panel import Panel 
