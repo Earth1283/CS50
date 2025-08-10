@@ -4,7 +4,7 @@
 ![GitHub License](https://img.shields.io/github/license/Earth1283/CS50)  
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Earth1283/CS50)  
 ![Weird Stuff](https://img.shields.io/badge/Unit_tests-Passing_if_you_run_a_second_time-lightgreen)  
-![maintainability](https://img.shields.io/badge/maintainable%3F-No-green)  
+![maintainability](https://img.shields.io/badge/maintainable%3F-Hopefully-yes-green)  
 ![run](https://img.shields.io/badge/does-the-code-run%3F-Yes-green)
 
 This ~~madman~~ CS50 programmer tried to implement Linux with Python 3.12.
