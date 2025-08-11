@@ -1,4 +1,3 @@
-testTodoHelper.py
 root/documents/todo.csv
 .env
 /logs/
@@ -14,8 +13,6 @@ undefined.log
 undefined
 /__pycache__
 /testing/
-testing.py
 /etc/
 /memory
 /applications
-test/
