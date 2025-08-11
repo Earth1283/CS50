@@ -49,14 +49,8 @@ def parseTodo():
     console.print(bigBox)
 
 def validated(userInput):
-    match userInput:
-        case 1:
-            return True
-        case 2:
-            return True
-        case 3:
-            return True
-        case 4:
-            return True
-        case _:
-            return False
+    validInput = [1, 2, 3, 4]
+    if userInput not in validInput:
+        return False
+    else:
+        return True
