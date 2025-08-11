@@ -23,7 +23,7 @@ The user's privacy will be put in the first place, so please refer to the **Perm
 - ✅ Multithreaded background application execution support
 ## Upcoming Features / Todo
 - 🔔 Expandable & Usable API for user extendable programs
-- 🔔 Better TUI framework for a more responsive user interface 
+- 🔔 Better TUI framework for a more responsive user interface (this will probably be the `textual` framework)
 ## Core Technologies
 I used `rich` as a library for color rendering of terminal output and coloring it.
 The `bcrypt` library was used to store & hash user passwords in `etc/psswd`

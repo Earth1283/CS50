@@ -31,10 +31,10 @@ class toDo():
         option4 = Text("[4] - Advanced task mainipulation (to be done)", justify="center")
         quit = Text("Note, you can exit with \"Control + C\"")
         console.print(f"{option1}\n{option2}\n{option3}\n{option4}\n\n{quit}")
-        while not validated(
-            input("Please enter your desired function\n▶ ")
-            ): # oh lol we got a sad face here
+        desiredFunction = int(0)
+        while not validated(desiredFunction):
+            desiredFunction = input("Please enter your desired function\n▶ ").strip()
             continue # stupid but works ig
-        
+
 def initialize():
     toDo.main()
