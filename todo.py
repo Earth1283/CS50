@@ -2,7 +2,9 @@ from rich.panel import Panel
 from rich.text import Text
 from rich.console import Console
 from todoHelper import noData, parseTodo, validated
+from api.logger import fileLog as fl
 import json
+import csv
 from appStorage import setAppInfo, getAppInfo, listAppInfo, AppStorageError
 console = Console()
 
@@ -42,23 +44,34 @@ class toDo():
             continue # stupid but works ig
         match desiredFunction:
             case 1:
-                console.print("You may enter your new task name below:", style="#00AAFF")
-                placeholderAnswer = "looooooooooooooooooooooooooooooooooooooooooooooooooooooongAnswer"
-                userAnswer = placeholderAnswer
-                tempArray = [] # store the function for now (use csv writer later)
-                while len(userAnswer)>40:
-                    userAnswer = input("▶ ").strip()
-                    console.print("Please refrain from using excessively long titles", style="#FF0000")
-                    continue
-                tempArray = tempArray.append(userAnswer)
-                # that's it for the first column
-                userAnswer = placeholderAnswer
-                console.print("Now you may enter your task details below:")
-                while len(userAnswer)>100:
-                    userAnswer = input("▶ ").strip()
-                    console.print(f"Please refrain cerating task descriptions above 100 characters")
-                    console.print(f"Your input was {len(userAnswer)} characters long")
-                    continue
+                tempArray = []
+
+                taskName = input("Enter the task name (max 40 chars):\n▶ ").strip()
+                # Loop ONLY if the input is too long
+                while len(taskName) > 40:
+                    console.print("[red]Oops, that name is too long. Keep it under 40 characters.[/red]")
+                    taskName = input("▶ ").strip()
+                tempArray.append(taskName)
+
+                task_details = input("Enter the task details (max 100 chars):\n▶ ").strip()
+                while len(task_details) > 100:
+                    console.print("[red]Those details are a bit long. Keep it under 100 characters.[/red]")
+                    fl.warn(f"User wrote a too long task detail! It was {len(task_details)} chars long!")
+                    task_details = input("▶ ").strip()
+                tempArray.append(task_details)
+
+                console.print(f"[green]Task '{tempArray[0]}' added![/green]")
+                
+                # Now, we should write it to storage
+                tempArray.append("incomplete")
+
+                with open('root/documents/todo.csv', 'a', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(tempArray)
+                    fl.log("Written new task to CSV")
+                parseTodo()
+            # That's it for option 1
+
 
 def initialize():
     toDo.main()
