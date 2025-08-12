@@ -11,46 +11,57 @@ from rich.text import Text
 import csv
 
 def noData():
-    noDataText = Text("There is currently no data in the todo file!\nRelaunch this application to view an empty table", justify="center")
-    noDataPanel = Panel(noDataText, style="#FFAE00", width=80, padding=(1, 1), title="Warning!")
+    noDataText = Text("There are currently no tasks in your to-do list!\nAdd a task to get started!", justify="center")
+    noDataPanel = Panel(noDataText, style="#FFAE00", width=80, padding=(1, 1), title="To-Do List")
     console.print(noDataPanel)
     
 def parseTodo():
-    with open('root/documents/todo.csv', 'r') as file:
-        reader = csv.DictReader(file)
-        tasks = [row for row in reader]
-    
-    table = Table(title="Your To-Do list", box=box.ROUNDED)
-    table.add_column("Task Name", style="cyan", no_wrap=True)
-    table.add_column("Task Info", style="green")
-    table.add_column("Task Status", style="yellow")
-    statusStyles = {
-        'complete': "#26FF00",
-        'in progress': "#F0FF50",
-        'incomplete': "#FF0000" # Define colors
-    }
-    for task in tasks:
-        status = task['status'].strip().lower()
-        style = statusStyles.get(status, 'white')
-        table.add_row(
-            task['taskName'],
-            task['taskInfo'],
-            f'[{style}]{task["status"]}[/]'# Apply the colors
-        )
+    """
+    Parses and displays todo data from the CSV file.
+    """
+    try:
+        with open('root/documents/todo.csv', 'r', encoding='utf-8') as file:
+            # Using DictReader is great for this
+            reader = csv.DictReader(file)
+            tasks = list(reader)
+        
+        if not tasks:
+            noData()
+            return
 
-    bigBox = Panel(
-        Align.center(table),
-        title="[bold]To-Do App[/bold]",
-        width=80,
-        box=ROUNDED,
-        border_style="#00AEFF"
-    )
-    bigBox = Align.center(bigBox)
-    console.print(bigBox)
+        table = Table(title="Your To-Do list", box=box.ROUNDED)
+        table.add_column("Task Name", style="cyan", no_wrap=True)
+        table.add_column("Task Info", style="green")
+        table.add_column("Task Status", style="yellow")
+        
+        statusStyles = {
+            'complete': "#26FF00",
+            'in progress': "#F0FF50",
+            'incomplete': "#FF0000"
+        }
+
+        for task in tasks:
+            status = task.get('status', 'incomplete').strip().lower()
+            style = statusStyles.get(status, 'white')
+            table.add_row(
+                task.get('taskName', 'N/A'),
+                task.get('taskInfo', ''),
+                f'[{style}]{task.get("status", "N/A").capitalize()}[/]'
+            )
+
+        bigBox = Panel(
+            Align.center(table),
+            title="[bold]To-Do App[/bold]",
+            width=80,
+            box=ROUNDED,
+            border_style="#00AEFF"
+        )
+        bigBox = Align.center(bigBox)
+        console.print(bigBox)
+    except FileNotFoundError:
+        # This will be hit if the file doesn't exist yet
+        noData()
 
 def validated(userInput):
     validInput = [1, 2, 3, 4]
-    if userInput not in validInput:
-        return False
-    else:
-        return True
+    return userInput in validInput
