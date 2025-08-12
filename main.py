@@ -108,6 +108,7 @@ def main():
                         toDo.main() # type: ignore
                     except Exception as e:
                         applicationError("ToDo", f"Other Unhandled Error: {type(e).__name__}: {e}")
+                    console.clear()
                     printWelcome()
                 case "exit":
                     console.print("Exiting Pythux, goodbye!", style="#90EE90")
