@@ -6,6 +6,7 @@ from todoHelper import parseTodo, validated
 from api.logger import fileLog as fl
 from rich.box import ROUNDED
 from rich.align import Align
+import time
 import csv
 import os
 
@@ -36,6 +37,7 @@ def writeTasks(tasks):
 class toDo():
     @staticmethod
     def main():
+        console.clear()
         initialText = Text("Hello!\nWelcome to Pythux's dedicated todo list!\n", justify="center", style="#FFB300")
         console.print(initialText)
 
@@ -47,6 +49,7 @@ class toDo():
 
         while True:
             try:
+                console.clear()
                 parseTodo()
 
                 option1 = Text("[1] - Create a new task", justify="center")
@@ -122,7 +125,7 @@ class toDo():
                             console.print(f"[bold red]An error occurred: Please enter a valid number.[/bold red]")
 
                     case 3: # Remove a task
-                        console.print("[bold red]Remove a task[/bold red]")
+                        console.print("[bold red]Currently removing a task[/bold red]")
                         tasks = displayAndGetTasks()
                         if not tasks:
                             return
@@ -137,7 +140,7 @@ class toDo():
 
                             taskToDeleteName = tasks[taskId - 1][0]
                             
-                            confirmation = console.input(f"Are you sure you want to delete '[bold cyan]{taskToDeleteName}[/bold cyan]'? (y/n)\n▶ ").strip().lower()
+                            confirmation = console.input(f"[bold red]WARNING[/bold red]: Are you sure you want to delete '[bold cyan]{taskToDeleteName}[/bold cyan]'? This cannot be underdone! (y/n)\n▶ ").strip().lower()
 
                             if confirmation == 'y':
                                 tasks.pop(taskId - 1)
@@ -152,6 +155,7 @@ class toDo():
                     
                     case 4:
                         console.print("[bold yellow]This feature is coming soon! Maybe. Probably.[/bold yellow]")
+                        time.sleep(1.5)
             except EOFError:
                 console.print("[bold green]Goodbye![/bold green]")
                 break
