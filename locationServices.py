@@ -5,6 +5,9 @@ from typing import Optional, Dict, Union
 from logger import fileLog as fl
 from rich import print
 from rich.panel import Panel
+from rich.text import Text  
+from rich.console import Console
+console = Console()
 
 
 def _get_api_key() -> Optional[str]:
@@ -103,9 +106,17 @@ def _get_full_geolocation() -> Optional[Dict[str, float]]:
 def requestPerms(applicationName, reason): # New requestPermission method
     if reason != "":
         print(Panel(f"{applicationName} would like access to your geolocation from your IP address for the following reason:\n{reason}", title="Location Services Access Request", style="#89CFF0"))
-        response = input("Would you like to allow this (y/n)? ")
+        disclaimer = Text(
+            "Pythux determines your location via your public IP adress"
+            "This could be inaccurate, especially if you are running this on a remote host or VPN"
+            "Pythux does not know what application developers do with your geolocation, so please be weary",
+            style="#FF8D1C",
+            justify="center"
+        )
+        console.print(disclaimer)
+        response = input("\nWould you like to allow this (y/n)? ")
         fl.log(f"Requesting for location services access from {applicationName} with reason {reason}")
-        match response: # THIS CODE IS REACHABLE PYCHARM STOP FREAKING OUT
+        match response:
             case "y":
                 return True
             case "yes":
