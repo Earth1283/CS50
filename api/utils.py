@@ -26,6 +26,8 @@ validate("targetText", ["targetText", "nottargettext", "hi"], True)
         userInput = userInput.strip()
         # now we want to cycle through the list to make everything lowercase
         acceptedValues = [value.lower() for value in acceptedValues]
+        userInput = userInput.lower()
+        # forgot to lower user input
     
     if userInput in acceptedValues:
         return True
