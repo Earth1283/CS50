@@ -22,7 +22,13 @@ def getTasks():
         try:
             # Skip header
             next(reader)
-            return list(reader)
+            tasks = []
+            for row in reader:
+                if len(row) < 4:
+                    # Add default priority for old tasks
+                    row.append('Medium')
+                tasks.append(row)
+            return tasks
         except StopIteration:
             # File is empty
             return []
@@ -31,7 +37,7 @@ def writeTasks(tasks):
     """Writes a list of tasks to the CSV file, overwriting it."""
     with open(todoFile, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
-        writer.writerow(['taskName', 'taskInfo', 'status'])  # Write header
+        writer.writerow(['taskName', 'taskInfo', 'status', 'priority'])  # Write header
         writer.writerows(tasks)
 
 class toDo():
@@ -55,7 +61,7 @@ class toDo():
                 option1 = Text("[1] - Create a new task", justify="center")
                 option2 = Text("[2] - Edit a task", justify="center")
                 option3 = Text("[3] - Remove a task", justify="center")
-                option4 = Text("[4] - Advanced task mainipulation (to be done)", justify="center")
+                option4 = Text("[4] - Advanced task manipulation", justify="center")
                 quitText = Text("Note, you can exit with \"Control + D\"", justify="center")
                 console.print(f"\n{option1}\n{option2}\n{option3}\n{option4}\n\n{quitText}")
                 
@@ -79,7 +85,7 @@ class toDo():
                             fl.warn(f"User wrote a too long task detail! It was {len(taskDetails)} chars long!")
                             taskDetails = input("▶ ").strip()
 
-                        newTask = [taskName, taskDetails, "incomplete"]
+                        newTask = [taskName, taskDetails, "incomplete", "Medium"]
                         with open(todoFile, 'a', newline='', encoding='utf-8') as file:
                             writer = csv.writer(file)
                             writer.writerow(newTask)
@@ -115,7 +121,7 @@ class toDo():
                                     break
                                 console.print("[red]Invalid status. Please choose [bold]one option[/bold] from the options.[/red]")
 
-                            tasks[taskId - 1] = [newName, newInfo, newStatus]
+                            tasks[taskId - 1] = [newName, newInfo, newStatus, taskToEdit[3]]
                             writeTasks(tasks)
                             
                             console.print(f"[green]Successfully updated task '{newName}'![/green]")
@@ -153,9 +159,46 @@ class toDo():
                         except ValueError:
                             console.print(f"[bold red]An error occurred: Please enter a valid number.[/bold red]")
                     
-                    case 4:
-                        console.print("[bold yellow]This feature is coming soon! Maybe. Probably.[/bold yellow]")
-                        time.sleep(1.5)
+                    case 4: # Advanced task manipulation
+                        console.print("[bold cyan]Advanced Task Manipulation[/bold cyan]")
+                        tasks = displayAndGetTasks()
+                        if not tasks:
+                            time.sleep(1.5)
+                            continue
+
+                        try:
+                            taskIdStr = console.input("Enter the [bold]ID[/bold] of the task you'd like to modify\n▶  ").strip()
+                            taskId = int(taskIdStr)
+
+                            if not 1 <= taskId <= len(tasks):
+                                console.print("[red]Invalid task ID. That number is not in the list.[/red]")
+                                time.sleep(1.5)
+                                continue
+                            
+                            taskToChange = tasks[taskId - 1]
+                            console.print(f"Selected Task: [cyan]{taskToChange[0]}[/cyan] (Current Priority: [yellow]{taskToChange[3]}[/yellow])")
+
+                            priority_options = ["Low", "Medium", "High"]
+                            new_priority = console.input(f"Enter new priority ({'/'.join(priority_options)}) or press Enter to cancel:\n▶ ").strip().capitalize()
+
+                            if not new_priority:
+                                console.print("[yellow]Operation cancelled.[/yellow]")
+                                time.sleep(1.5)
+                                continue
+
+                            if new_priority in priority_options:
+                                tasks[taskId - 1][3] = new_priority
+                                writeTasks(tasks)
+                                console.print(f"[green]Successfully updated priority for '{taskToChange[0]}' to '{new_priority}'![/green]")
+                                fl.log(f"Updated task priority for '{taskToChange[0]}'.")
+                            else:
+                                console.print(f"[red]Invalid priority. Please choose from {', '.join(priority_options)}.[/red]")
+                            
+                            time.sleep(1.5)
+
+                        except ValueError:
+                            console.print(f"[bold red]An error occurred: Please enter a valid number.[/bold red]")
+                            time.sleep(1.5)
             except EOFError:
                 console.print("[bold green]Goodbye![/bold green]")
                 break
@@ -173,21 +216,31 @@ def displayAndGetTasks():
     table.add_column("Task Name", style="cyan", no_wrap=True)
     table.add_column("Task Info", style="green")
     table.add_column("Status", style="yellow")
+    table.add_column("Priority", style="blue") # New column
     
     statusStyles = {
         'complete': "green",
         'in progress': "yellow",
         'incomplete': "red"
     }
+    priorityStyles = {
+        'High': "bold red",
+        'Medium': "yellow",
+        'Low': "green"
+    }
     
     for i, taskRow in enumerate(tasks, 1):
-        taskName, taskInfo, status = taskRow
-        style = statusStyles.get(status.lower(), 'white')
+        if len(taskRow) < 4: # Backward compatibility
+            taskRow.append("Medium")
+        taskName, taskInfo, status, priority = taskRow
+        status_style = statusStyles.get(status.lower(), 'white')
+        priority_style = priorityStyles.get(priority, 'white')
         table.add_row(
             str(i),
             taskName,
             taskInfo,
-            f'[{style}]{status.capitalize()}[/]'
+            f'[{status_style}]{status.capitalize()}[/]',
+            f'[{priority_style}]{priority}[/]' # Add priority to row
         )
         
     console.print(Align.center(table))
@@ -195,3 +248,7 @@ def displayAndGetTasks():
 
 def initialize():
     toDo.main()
+
+
+if __name__ == "__main__":
+    initialize()
