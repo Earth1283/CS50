@@ -50,7 +50,7 @@ def main():
                     continue
             except KeyboardInterrupt:
                 print("\n[red on white]Exiting password check...[/red on white]")
-                fl.log("User interrupted password check")
+                fl.warn("User interrupted password check")
                 exit(0)
     else:
         while True:
