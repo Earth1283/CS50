@@ -14,13 +14,6 @@ def validate(
     Returns:
         `bool` (True or False): If the `userInput` matches one of the values within the `acceptedValues` arg
         it will return with `True`, otherwise, it will return `False` 
-    
-    Usage:
-```python
-from todoHelper import validate
-validate("targetText", ["targetText", "nottargettext", "hi"], True)
-```
-
     """
     if not caseSensitivity:
         userInput = userInput.strip()
@@ -30,6 +23,62 @@ validate("targetText", ["targetText", "nottargettext", "hi"], True)
         # forgot to lower user input
     
     if userInput in acceptedValues:
+        return True
+    else:
+        return False
+
+def validateJSON(
+        jsonInput:dict
+) -> bool:
+    """
+    Validates if a dictionary can be serialized to JSON.
+
+    Args:
+        `jsonInput` (dict): The dictionary to be validated.
+
+    Returns:
+        `bool`: `True` if the dictionary can be serialized to JSON, `False` otherwise.
+    """
+    # import json
+    import json
+    # validate JSON
+    try:
+        json.dumps(jsonInput)
+        return True
+    except (TypeError, ValueError):
+        return False
+
+def query(
+        target:str,
+        database:dict|list,
+        capsInsensitive:bool|None=False,
+        stripSpaces:bool|None=True
+) -> bool:
+    """
+    Queries a list or dictionary for a target string.
+
+    Args:
+        `target` (str): The string to search for.
+        `database` (dict | list): The data to search within. If a list, searches items. If a dict, searches keys.
+        `capsInsensitive` (bool, optional): If True, performs a case-insensitive search. Defaults to False.
+        `stripSpaces` (bool, optional): If True, strips leading/trailing whitespace before comparison. Defaults to True.
+
+    Returns:
+        `bool`: `True` if the target is found, `False` otherwise.
+    """
+    if capsInsensitive:
+        target = target.lower()
+        if type(database) == list:
+            database = [item.lower() for item in database]
+        elif type(database) == dict:
+            database = {k.lower(): v for k, v in database.items()}
+    if stripSpaces:
+        target = target.strip()
+        if type(database) == list:
+            database = [item.strip() for item in database]
+        elif type(database) == dict:
+            database = {k.strip(): v for k, v in database.items()}
+    if target in database:
         return True
     else:
         return False
