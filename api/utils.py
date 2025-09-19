@@ -136,10 +136,13 @@ def makeAnArray(
     """
     return list(args)
 
-# TODO: Finish this func
-"""def makeADict(
-        array1: list,
-        array2: list
-) -> dict:
-    if len(array1) or len(array2) < 1:
-        raise ValueError("Empty array!")"""
+def fileExsists(
+        path:str
+) -> bool:
+    import pathlib
+    try:
+        with open(path, 'r'):
+            ...
+        return True
+    except:
+        return False
