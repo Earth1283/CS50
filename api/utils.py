@@ -121,3 +121,25 @@ def checkURL(
         return False
     except requests.exceptions.RequestException: #type:ignore vscode being dumb
         return False
+    
+def makeAnArray(
+    *args:str
+) -> list:
+    """
+    Takes any number of arguments and returns them as a list.
+
+    Args:
+    *args: Any number of arguments of any type.
+
+    Returns:
+    list: A list containing all the input arguments.
+    """
+    return list(args)
+
+# TODO: Finish this func
+"""def makeADict(
+        array1: list,
+        array2: list
+) -> dict:
+    if len(array1) or len(array2) < 1:
+        raise ValueError("Empty array!")"""
