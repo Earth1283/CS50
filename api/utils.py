@@ -139,7 +139,6 @@ def makeAnArray(
 def fileExsists(
         path:str
 ) -> bool:
-    import pathlib
     try:
         with open(path, 'r'):
             ...
