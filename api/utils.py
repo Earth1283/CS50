@@ -1,3 +1,4 @@
+from logger import fileLog as fl
 def validate(
         userInput:str, 
         acceptedValues:list[str], 
@@ -22,10 +23,7 @@ def validate(
         userInput = userInput.lower()
         # forgot to lower user input
     
-    if userInput in acceptedValues:
-        return True
-    else:
-        return False
+    return userInput in acceptedValues
 
 def validateJSON(
         jsonInput:dict
@@ -59,9 +57,13 @@ def query(
 
     Args:
         `target` (str): The string to search for.
+
         `database` (dict | list): The data to search within. If a list, searches items. If a dict, searches keys.
+
         `capsInsensitive` (bool, optional): If True, performs a case-insensitive search. Defaults to False.
+
         `stripSpaces` (bool, optional): If True, strips leading/trailing whitespace before comparison. Defaults to True.
+
 
     Returns:
         `bool`: `True` if the target is found, `False` otherwise.
@@ -81,4 +83,41 @@ def query(
     if target in database:
         return True
     else:
+        return False
+
+def validateEmail(
+        email:str
+) -> bool:
+    import re
+    """
+    Validates an email address using regex.
+
+    Args:
+        `email` (str): The email address to validate.
+
+    Returns:
+        `bool`: `True` if the email is valid, `False` otherwise.
+    """
+    # regex for validating email addresses
+    pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    # check if the email matches the pattern
+    if re.match(pattern, email):
+        return True
+    else:
+        return False
+    
+def checkURL(
+        url:str,
+        desiredTimeout:int | None=5
+) -> bool:
+    try:
+        import requests
+
+        response = requests.head(url, timeout=desiredTimeout)
+
+        return response.status_code < 400 # return true for 2xx nd 3xx code
+    except ImportError:
+        fl.error("Unable to send requests to the URI: Requests not installed!")
+        return False
+    except requests.exceptions.RequestException: #type:ignore vscode being dumb
         return False
