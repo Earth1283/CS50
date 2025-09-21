@@ -106,7 +106,7 @@ def validate_email(
     else:
         return False
     
-def checkURL(
+def check_url(
         url:str,
         desiredTimeout:int | None=5
 ) -> bool:
@@ -122,7 +122,7 @@ def checkURL(
     except requests.exceptions.RequestException: #type:ignore vscode being dumb
         return False
     
-def makeAnArray(
+def make_an_array(
     *args:str
 ) -> list:
     """
