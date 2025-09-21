@@ -1,8 +1,9 @@
 from logger import fileLog as fl
+import os
 def validate(
-        userInput:str, 
-        acceptedValues:list[str], 
-        caseSensitivity:bool | None=False
+        user_input:str,
+        accepted_values:list[str],
+        case_sensitivity: bool | None=False
         ) -> bool:
     """
     Validates user input based on two arguments
@@ -16,17 +17,17 @@ def validate(
         `bool` (True or False): If the `userInput` matches one of the values within the `acceptedValues` arg
         it will return with `True`, otherwise, it will return `False` 
     """
-    if not caseSensitivity:
-        userInput = userInput.strip()
+    if not case_sensitivity:
+        user_input = user_input.strip()
         # now we want to cycle through the list to make everything lowercase
-        acceptedValues = [value.lower() for value in acceptedValues]
-        userInput = userInput.lower()
+        accepted_values = [value.lower() for value in accepted_values]
+        user_input = user_input.lower()
         # forgot to lower user input
     
-    return userInput in acceptedValues
+    return user_input in accepted_values
 
-def validate_JSON(
-        jsonInput:dict
+def validate_json(
+        json_input:dict
 ) -> bool:
     """
     Validates if a dictionary can be serialized to JSON.
@@ -41,7 +42,7 @@ def validate_JSON(
     import json
     # validate JSON
     try:
-        json.dumps(jsonInput)
+        json.dumps(json_input)
         return True
     except (TypeError, ValueError):
         return False
@@ -145,3 +146,43 @@ def fileExsists(
         return True
     except:
         return False
+
+def file_system_helper(
+        target:str,
+        action:str,
+        payload:str | None=None
+):
+    match action:
+        case "read":
+            try:
+                with open(f"{target}", "r") as file:
+                    return file.read()
+            except:
+                return False
+        case "write":
+            try:
+                with open(f"{target}", "w") as file:
+                    if payload == None:
+                        raise ValueError("You need a payload to write something!")
+                    else:
+                        file.write(payload)
+                        return True
+            except:
+                return False
+        case "append":
+            with open(f"{target}", "a") as file:
+                if payload == None:
+                    raise ValueError("You need a payload to append something!")
+                else:
+                    try:
+                        file.write(f"\n{payload}")
+                        return True
+                    except:
+                        return False
+
+        case "remove":
+            try:
+                os.remove(f"{payload}/{target}")
+                return True
+            except:
+                return False
