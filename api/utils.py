@@ -85,7 +85,7 @@ def query(
     else:
         return False
 
-def validateEmail(
+def validate_email(
         email:str
 ) -> bool:
     import re
