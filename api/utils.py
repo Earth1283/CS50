@@ -25,7 +25,7 @@ def validate(
     
     return userInput in acceptedValues
 
-def validateJSON(
+def validate_JSON(
         jsonInput:dict
 ) -> bool:
     """
