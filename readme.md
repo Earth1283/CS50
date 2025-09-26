@@ -1,10 +1,11 @@
 # Pythux
 # ![Pythux Logo](https://github.com/Earth1283/CS50/blob/main/githubImageResources/Pythux.jpg)
-# ![Alive Programmer](https://img.shields.io/badge/Programmer-Alive-green)  
-# ![GitHub License](https://img.shields.io/github/license/Earth1283/CS50)  
-# ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Earth1283/CS50)  
-# ![Weird Stuff](https://img.shields.io/badge/Unit_tests-Passing_if_you_run_a_second_time-lightgreen)
-# [![linting](https://github.com/Earth1283/CS50/actions/workflows/pylint.yml/badge.svg)](https://github.com/Earth1283/CS50/actions/workflows/pylint.yml)
+
+![Alive Programmer](https://img.shields.io/badge/Programmer-Alive-green)  
+![GitHub License](https://img.shields.io/github/license/Earth1283/CS50)  
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Earth1283/CS50)  
+![Weird Stuff](https://img.shields.io/badge/Unit_tests-Passing_if_you_run_a_second_time-lightgreen)
+[![linting](https://github.com/Earth1283/CS50/actions/workflows/pylint.yml/badge.svg)](https://github.com/Earth1283/CS50/actions/workflows/pylint.yml)
 
 This ~~madman~~ CS50 programmer tried to implement Linux with Python 3.12.
 ## Core Ideologies
@@ -32,10 +33,10 @@ Application Developers would have access to the following:
 - Your device date and time via DateTime
 
 Application developers will have to **ask for your permission** to have access to the following:
-- Your GeoLocation (starting support)
+- Your GeoLocation (obtained via your IPv4 address from the ipinfo.io api)
 - Your User Preferences for other apps
 - Other folders in the `root/insertText` 
 
 Application developers will **NEVER** have access to the following information from our APIs:
-- Your Password (from `etc/psswrd`)
+- Your Password (from `etc/psswrd`) -- even if they get the file, its encrypted with `bcrypt` so your password is safe!
 - Your directories from other than `root/dektop` and `root/documents`
