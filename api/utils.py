@@ -186,3 +186,18 @@ def file_system_helper(
                 return True
             except:
                 return False
+
+        case "exsists":
+            try:
+                with open(f"{target}", "r") as file:
+                    # do nothing :)
+                    return True
+            except:
+                return False # if anything goes south, its cooked
+            
+        case "touch":
+            try:
+                with open(f"{target}", "x") as file:
+                    return True
+            except: # it exsists
+                return False
