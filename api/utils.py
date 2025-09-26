@@ -201,3 +201,39 @@ def file_system_helper(
                     return True
             except: # it exsists
                 return False
+            
+def in_array(
+        target:str,
+        array:list,
+        regex:bool | None=False
+) -> bool:
+    if regex == False:
+        if target not in array:
+            return False
+        else:
+            return True
+    else:
+        import re #if we fail, let the error propegate
+        # this shouldn't happen in a standard python installation
+        for item in array:
+            if re.search(target, item):
+                return True
+        return False
+
+def in_dict(
+        target:str,
+        dict:dict,
+        regex:bool | None=False
+) -> bool:
+    if regex == False:
+        if target not in dict:
+            return False
+        else:
+            return True
+    else:
+        import re
+
+        for item in dict:
+            if re.search(target, item):
+                return True
+        return False
