@@ -6,8 +6,9 @@ from rich import print
 from rich.text import Text
 from rich.panel import Panel 
 from rich.box import ROUNDED
-from helper import createEmtpySettings, getTime, getDate, printWelcome, applicationError
+from helper import createEmtpySettings, printWelcome, applicationError
 from utility import checkInternet
+from api.utils import *
 import sqlite3
 import os
 from logger import fileLog as fl
@@ -18,22 +19,28 @@ import json
 import getpass
 import threading
 
+# Define global variables used by a lot of functions
+global config_path
+config_path = "config/config.json"
+global db_path
+db_path = "config/config.db"
+
 def main():
     # Before we begin, let's clear the user's console
     console.clear()
     """
     The following will be executed on startup
     """
-    # Run checkFileDirs and check internet connection in parallel using threading
+    # Run check_file_dirs and check internet connection in parallel using threading
     threads = []
-    t1 = threading.Thread(target=checkFileDirs)
+    t1 = threading.Thread(target=check_file_dirs)
     t2 = threading.Thread(target=checkConnection)
     threads.extend([t1, t2])
     for t in threads:
         t.start()
     for t in threads:
         t.join()
-    if checkIfPassExsists():
+    if pass_exsists():
         # load the password hash
         with open('etc/psswrd.txt', 'rb') as pswd:
             stored_hash = pswd.read().strip()
@@ -72,7 +79,7 @@ def main():
                 break
     
  # todo completed, user interface implemented later
-    if validateConfig():
+    if validate_config():
         parseConfig() # parse json config into their dictionaries so that 
         # applications could refer to them later
     else:
@@ -125,7 +132,7 @@ def main():
             console.print("You might have accidentally triggered control+D", style="#90EE90")
             console.print("If you wish to exit, press control+c", style="#90EE90")
             continue
-def checkIfPassExsists():
+def pass_exsists() -> bool:
     # Try and see if there is a password in etc/psswrd (or if it's empty)
     try:
         with open('etc/psswrd.txt', 'r') as passwordReader:
@@ -136,8 +143,7 @@ def checkIfPassExsists():
             return True
     except FileNotFoundError:
         return False
-def validateConfig():
-    config_path = "config/config.json"
+def validate_config() -> bool:
     try:
         with open(config_path, "r") as f:
             json.load(f)
@@ -145,10 +151,7 @@ def validateConfig():
     except (json.JSONDecodeError, FileNotFoundError) as e:
         fl.fatal(f"Config validation failed: {e}")
         return False
-def parseConfig():
-    config_path = "config/config.json"
-    db_path = "config/config.db"
-
+def parseConfig() -> None:
     general = []
     weatherConfig = []
     musicConfig = []
@@ -190,45 +193,32 @@ def parseConfig():
 
     conn.close()
 
-def checkFileDirs():
-    if not os.path.exists("logs"):
-        os.makedirs("logs")
-        fl.warn("Logs directory was not found, creating it")
-    else:
-        fl.log("Logs directory is OK")
-    if not os.path.exists("memory"):
-        os.makedirs("memory")
-        # no need for logging / if else syntax, this is for ipc or stuff like that
-    if not os.path.exists("root/desktop"):
-        os.makedirs("root/desktop")
-        fl.warn("root/desktop was not found, creating it")
-    else:
-        fl.log("Desktop is OK")
-    if not os.path.exists("root/documents"):
-        os.makedirs("root/documents")
-        fl.warn("root/documents was not found, creating it")
-    else:
-        fl.log("Documents folder OK")
-    if not os.path.exists("etc"):
-        os.makedirs("etc")
-        fl.warn("etc directory not found, creating it")
-    else:
-        fl.log("Etc folder OK")
-    if not os.path.exists("config"):
-        os.makedirs("config")
-        fl.warn("config directory is gone, so might be the configs")
-        fl.warn("Creating a new config with helper.py")
-        createEmtpySettings()
-    else:
-        fl.log("config folder OK")
-    if not os.path.exists("applications"):
-        os.makedirs("applications")
-        fl.warn("Application directory gon missing")
-    else:
-        fl.log("Applications folder (looks) OK")
-    # now we can check the files needed for some hard-coded applications
-    if not os.path.exists("root/documents/todo.csv"):
-        with open("root/documents/todo.csv", "w") as f:
+def check_file_dirs() -> None:
+    dirs = [
+        ("logs", "Logs directory"),
+        ("memory", None),  # No logging needed
+        ("root/desktop", "Desktop"),
+        ("root/documents", "Documents folder"),
+        ("etc", "Etc folder"),
+        ("config", "Config folder"),
+        ("applications", "Applications folder"),
+    ]
+    for dir_path, log_name in dirs:
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+            if log_name:
+                fl.warn(f"{log_name} was not found, creating it")
+            if dir_path == "config":
+                fl.warn("Creating a new config with helper.py")
+                createEmtpySettings()
+        else:
+            if log_name:
+                fl.log(f"{log_name} is OK")
+
+    # Check for todo.csv file
+    todo_csv = "root/documents/todo.csv"
+    if not os.path.exists(todo_csv):
+        with open(todo_csv, "w") as f:
             f.write("taskName,taskInfo,status\n")
         fl.warn("Todo CSV file not found, creating it")
     else:
