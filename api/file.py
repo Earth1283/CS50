@@ -32,7 +32,7 @@ def getFileStructure(
             Fine-tune this for your specific hardware and workload if needed.
 
     Returns:
-        Union[Dict[str, Any], list[str]]: A nested dictionary or a flat list representing the file structure.
+        Union[Dict[str, Any], list[str]]: A nested dictionary or a list representing the file structure
         In dictionary outputs, the top-level key is the root directory's name, files are `None`,
         and directories are nested dictionaries.
 
@@ -43,7 +43,9 @@ def getFileStructure(
         raise ValueError(f"Error: Provided path '{fileDir}' is not a valid directory.")
 
     # --- Helper for concurrent recursive traversal ---
-    def _get_recursive_threaded(path: str, mode: str, executor: ThreadPoolExecutor) -> Dict[str, Any]:
+    def _get_recursive_threaded(path: str,
+                                mode: str,
+                                executor: ThreadPoolExecutor) -> Dict[str, Any]:
         structure = {}
         future_to_name = {}
         try:
