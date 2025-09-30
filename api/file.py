@@ -104,3 +104,72 @@ def getFileStructure(
 
     # If we get here, the user probably didn't enter a valid option
     raise ValueError(f"Error: Invalid returnDataMode '{returnDataMode}'. Valid options are 'all', 'folders', 'noSubdirs', 'files', 'surface'.")
+
+def is_file(path: str) -> bool:
+    """
+    Checks if the given path is a file.
+
+    Args:
+        path (str): The path to check.
+
+    Returns:
+        bool: True if the path is a file, False otherwise.
+    """
+    return os.path.isfile(path)
+
+
+def is_directory(path: str) -> bool:
+    """
+    Checks if the given path is a directory.
+
+    Args:
+        path (str): The path to check.
+
+    Returns:
+        bool: True if the path is a directory, False otherwise.
+    """
+    return os.path.isdir(path)
+
+
+def mkdir(path: str,
+          exist_ok: bool = True
+          ) -> None:
+    """
+    Creates a directory at the given path.
+
+    Args:
+        path (str): The path where the directory should be created.
+        exist_ok (bool): If False, raise an exception if the target directory already exists.
+                         If True (default), silently succeed if the target directory exists.
+
+    Raises:
+        OSError: If the directory cannot be created and exist_ok is False.
+    """
+    os.makedirs(path, exist_ok=exist_ok)
+
+
+def rm(path: str,
+       recursive: bool = False
+       ) -> None:
+    """
+    Removes the file or directory at the given path.
+
+    Args:
+        path (str): The path to the file or directory to remove.
+        recursive (bool): If True, recursively delete the directory and its contents.
+                          If False (default), only delete empty directories.
+
+    Raises:
+        OSError: If the file or directory cannot be removed.
+    """
+    if os.path.isfile(path):
+        os.remove(path)
+    elif os.path.isdir(path):
+        if recursive:
+            import shutil
+            shutil.rmtree(path)
+        else:
+            os.rmdir(path)
+    else:
+        raise OSError(f"No such file or directory: '{path}'")
+
