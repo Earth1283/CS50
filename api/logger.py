@@ -58,7 +58,3 @@ class fileLog: # THE FOLLOWING FOUR METHODS WILL BE DEPREICIATED IN FAVOR OF THE
         datetime.now().strftime("%H:%M:%S")
         with open(filename, 'a') as file:
             file.write(f"[{_level_str} {time}] {message}\n")
-
-    """
-    This newer api will make logging a whole lot simpler
-    """
