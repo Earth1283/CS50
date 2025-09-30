@@ -82,9 +82,9 @@ def main():
     if validate_config():
         parseConfig() # parse json config into their dictionaries so that 
         # applications could refer to them later
-    else:
+    else: # the config is invalid, inform the user
         console.print("FATAL ERROR! Your config.json is malformed!\nPythux will not boot until you fix this error!", style="bold blink red on white")
-        helpPanel = Text("You might want to try the following:\nRestart Pythux with config/config.json deleted (and Pythux will recreate a functional one)", justify="center")
+        helpPanel = Text("You might want to try the following:\n[1] Remove config/config.json [2] Reboot Pythux [3] Restore changes", justify="center")
         console.print(Panel(helpPanel, title="Suggested Actions", border_style="#06A900", box=ROUNDED))
         exit(1) # return with problematic error
     
@@ -102,36 +102,45 @@ def main():
                     try:
                         self = ""
                         weather.main(self) # type: ignore
-                        # There is no issue vscode
+
                     except ValueError:
                         console.clear()
-                        printWelcome() # for some reason this is not in the main loop? idk, printing it again
+                        printWelcome() # patch for an old bug
                         pass
+
                     except Exception as e:
                         applicationError("Weather", f"Other Unhandled Error: {type(e).__name__}: {e}")
+
                 case "2":
                     try:
                         self = ""
                         toDo.main() # type: ignore
+
                     except Exception as e:
                         applicationError("ToDo", f"Other Unhandled Error: {type(e).__name__}: {e}")
+
                     console.clear()
                     printWelcome()
+
                 case "exit":
                     console.print("Exiting Pythux, goodbye!", style="#90EE90")
                     exit(0)
+
                 case _:
                     console.print("[red]Invalid application[/red]")
                     console.clear()
                     printWelcome()
                     continue
+
         except KeyboardInterrupt:
             console.print("\nExiting Pythux", style="#90EE90")
             exit(0)
+
         except EOFError:
             console.print("You might have accidentally triggered control+D", style="#90EE90")
             console.print("If you wish to exit, press control+c", style="#90EE90")
             continue
+
 def pass_exsists() -> bool:
     # Try and see if there is a password in etc/psswrd (or if it's empty)
     try:
@@ -196,7 +205,7 @@ def parseConfig() -> None:
 def check_file_dirs() -> None:
     dirs = [
         ("logs", "Logs directory"),
-        ("memory", None),  # No logging needed
+        ("memory", None),  # No logging needed, its ok for them to delete it
         ("root/desktop", "Desktop"),
         ("root/documents", "Documents folder"),
         ("etc", "Etc folder"),
@@ -227,6 +236,7 @@ def check_file_dirs() -> None:
 def checkConnection() -> None:
     if checkInternet():
         fl.log("Internet connection is OK")
+
     else:
         fl.error("No internet connection detected")
         # moan to console
