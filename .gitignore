@@ -1,6 +1,7 @@
 root/documents/todo.csv
 .env
 /logs/
+*/__pycache__
 /etc/psswrd.txt
 /config/config.db
 temp.txt
