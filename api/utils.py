@@ -237,3 +237,9 @@ def in_dict(
             if re.search(target, item):
                 return True
         return False
+    
+def in_this(
+        target:str,
+        look_in:dict | list
+) -> bool:
+    return target in look_in
