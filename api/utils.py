@@ -1,31 +1,5 @@
 from logger import fileLog as fl
 import os
-def validate(
-        user_input:str,
-        accepted_values:list[str],
-        case_sensitivity: bool | None=False
-        ) -> bool:
-    """
-    Validates user input based on two arguments
-    
-    Args:
-        `userInput` (str): The user's input. This input will be processed as a string and be stripped of leading & trailing spaces
-        `acceptedValues`: An array (list) on the accepted values, pass on values like this: `[val1, val2, val3]`
-        `caseSensitivity` (Bool, Optional): This is an optional boolean to specify if the program processes things insensitively
-
-    Returns:
-        `bool` (True or False): If the `userInput` matches one of the values within the `acceptedValues` arg
-        it will return with `True`, otherwise, it will return `False` 
-    """
-    if not case_sensitivity:
-        user_input = user_input.strip()
-        # now we want to cycle through the list to make everything lowercase
-        accepted_values = [value.lower() for value in accepted_values]
-        user_input = user_input.lower()
-        # forgot to lower user input
-    
-    return user_input in accepted_values
-
 def validate_json(
         json_input:dict
 ) -> bool:
@@ -48,64 +22,62 @@ def validate_json(
         return False
 
 def query(
-        target:str,
-        database:dict|list,
-        capsInsensitive:bool|None=False,
-        stripSpaces:bool|None=True
+        target: str,
+        database: dict | list | set,
+        case_sensitive: bool = False,
+        strip_spaces: bool = True,
+        regex: bool = False
 ) -> bool:
     """
-    Queries a list or dictionary for a target string.
+    Queries a collection for a target string with various matching options.
 
     Args:
-        `target` (str): The string to search for.
-
-        `database` (dict | list): The data to search within. If a list, searches items. If a dict, searches keys.
-
-        `capsInsensitive` (bool, optional): If True, performs a case-insensitive search. Defaults to False.
-
-        `stripSpaces` (bool, optional): If True, strips leading/trailing whitespace before comparison. Defaults to True.
-
+        target (str): The string to search for
+        database (dict|list|set): The data to search within
+        case_sensitive (bool): Whether to perform case-sensitive search
+        strip_spaces (bool): Whether to strip spaces before comparison
+        regex (bool): Whether to use regex matching
 
     Returns:
-        `bool`: `True` if the target is found, `False` otherwise.
+        bool: True if target is found, False otherwise
     """
-    if capsInsensitive:
-        target = target.lower()
-        if type(database) == list:
-            database = [item.lower() for item in database]
-        elif type(database) == dict:
-            database = {k.lower(): v for k, v in database.items()}
-    if stripSpaces:
-        target = target.strip()
-        if type(database) == list:
-            database = [item.strip() for item in database]
-        elif type(database) == dict:
-            database = {k.strip(): v for k, v in database.items()}
-    if target in database:
-        return True
-    else:
-        return False
+    if regex:
+        import re
+        if isinstance(database, dict):
+            database = list(database.keys())
+        return any(re.search(target, str(item)) for item in database)
 
-def validate_email(
-        email:str
-) -> bool:
-    import re
+    if not case_sensitive:
+        target = target.lower()
+        if isinstance(database, list) or isinstance(database, set):
+            database = [str(item).lower() for item in database]
+        elif isinstance(database, dict):
+            database = {k.lower(): v for k, v in database.items()}
+    
+    if strip_spaces:
+        target = target.strip()
+        if isinstance(database, list) or isinstance(database, set):
+            database = [str(item).strip() for item in database]
+        elif isinstance(database, dict):
+            database = {k.strip(): v for k, v in database.items()}
+
+    if isinstance(database, dict):
+        return target in database
+    return target in database
+
+def validate_email(email: str) -> bool:
     """
     Validates an email address using regex.
 
     Args:
-        `email` (str): The email address to validate.
+        email (str): The email address to validate.
 
     Returns:
-        `bool`: `True` if the email is valid, `False` otherwise.
+        bool: True if the email is valid, False otherwise.
     """
-    # regex for validating email addresses
+    import re
     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    # check if the email matches the pattern
-    if re.match(pattern, email):
-        return True
-    else:
-        return False
+    return bool(re.match(pattern, email))
     
 def check_url(
         url:str,
@@ -201,45 +173,3 @@ def file_system_helper(
                     return True
             except: # it exsists
                 return False
-            
-def in_array(
-        target:str,
-        array:list,
-        regex:bool | None=False
-) -> bool:
-    if regex == False:
-        if target not in array:
-            return False
-        else:
-            return True
-    else:
-        import re #if we fail, let the error propegate
-        # this shouldn't happen in a standard python installation
-        for item in array:
-            if re.search(target, item):
-                return True
-        return False
-
-def in_dict(
-        target:str,
-        dict:dict,
-        regex:bool | None=False
-) -> bool:
-    if regex == False:
-        if target not in dict:
-            return False
-        else:
-            return True
-    else:
-        import re
-
-        for item in dict:
-            if re.search(target, item):
-                return True
-        return False
-    
-def in_this(
-        target:str,
-        look_in:dict | list
-) -> bool:
-    return target in look_in
