@@ -1,3 +1,16 @@
+import time
+import json
+import getpass
+import threading
+import os
+from helper import createEmtpySettings, printWelcome, applicationError
+from utility import checkInternet
+from api.utils import *
+import sqlite3
+from logger import fileLog as fl
+from todo import toDo
+from weather import weather
+import bcrypt
 from rich.traceback import install
 install(show_locals=True)
 from rich.console import Console
@@ -6,18 +19,6 @@ from rich import print
 from rich.text import Text
 from rich.panel import Panel 
 from rich.box import ROUNDED
-from helper import createEmtpySettings, printWelcome, applicationError
-from utility import checkInternet
-from api.utils import *
-import sqlite3
-import os
-from logger import fileLog as fl
-from todo import toDo
-from weather import weather
-import bcrypt
-import json
-import getpass
-import threading
 
 # Define global variables used by a lot of functions
 global config_path
@@ -95,7 +96,7 @@ def main():
     # Now we need to query the user:
     while True:
         try:
-            application = input("Enter your desired applicaiton\n▶ ").strip().lower()
+            application = str(input("Enter your desired applicaiton\n▶ ").strip().lower())
             # PATCH: depreciated the application variable in favor of match...case syntax
             match application:
                 case "1":
@@ -119,6 +120,15 @@ def main():
                     except Exception as e:
                         applicationError("ToDo", f"Other Unhandled Error: {type(e).__name__}: {e}")
 
+                    console.clear()
+                    printWelcome()
+
+                case "onboarding":
+                    # TODO: Finish onboarding
+                    print("[green]Welcome to Pythux!")
+                    print("[red]Onboarding not yet fully implemented![/red]")
+                    print("Auto redirecting to home page soon...")
+                    time.sleep(5)
                     console.clear()
                     printWelcome()
 
