@@ -7,8 +7,8 @@ from rich.console import Console
 console = Console()
 from rich.traceback import install
 install(show_locals=True)
-from logger import fileLog as fl, LogLevel
-from locationServices import getLat, getLon, requestPerms
+from logger import file_log as fl, LogLevel
+from location_services import getLat, getLon, requestPerms
 from rich.panel import Panel
 from rich.text import Text
 from rich.box import ROUNDED

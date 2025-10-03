@@ -1,4 +1,4 @@
-from logger import fileLog as fl
+from logger import file_log as fl
 import os
 def validate_json(
         json_input:dict

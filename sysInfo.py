@@ -1,4 +1,4 @@
-from logger import fileLog as fl, LogLevel
+from logger import file_log as fl, LogLevel
 import platform
 def getOS():
     fl.logger(LogLevel.INFO, "Getting OS info from API call")

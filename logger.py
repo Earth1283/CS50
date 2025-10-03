@@ -1,9 +1,9 @@
-from datetime import datetime
-from typing import Optional
 import os
+from datetime import datetime
 from enum import Enum
 
-def genFileName():
+
+def gen_file_name():
     time = datetime.now().strftime("%H-%M-%S")  # Use - instead of : for file safety
     date = datetime.now().strftime("%Y-%m-%d")
     global filename
@@ -23,9 +23,9 @@ class LogLevel(Enum):
     ERROR = "ERROR"
     FATAL = "!!!FATAL ERROR!!!"
 
-# Upcomming depreciation of previous API methods
+# depreciation of previous API methods soon
 
-class fileLog:
+class file_log:
     @staticmethod
     def log(message: str) -> None:
         time = datetime.now().strftime("%H:%M:%S")

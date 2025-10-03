@@ -1,13 +1,16 @@
 from datetime import datetime
+from typing import Optional
+
+from rich import print
+from rich.align import Align
 from rich.box import ROUNDED
-from rich.text import Text
 from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
-from rich.align import Align
-from rich import print
-from typing import Optional
-from logger import fileLog as fl
+from rich.text import Text
+
+from logger import file_log as fl
+
 console = Console()
 def createEmtpySettings() -> None:
     with open('config/config.json', 'w') as file:

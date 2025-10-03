@@ -2,7 +2,7 @@ import yaml
 import os
 from pathlib import Path
 from typing import List, Dict
-from logger import fileLog as fl
+from logger import file_log as fl
 from logger import LogLevel
 
 applications: List[Dict] = []

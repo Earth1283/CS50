@@ -2,7 +2,7 @@ import requests
 import sqlite3
 import json
 from typing import Optional, Dict, Union
-from logger import fileLog as fl
+from logger import file_log as fl
 from rich import print
 from rich.panel import Panel
 from rich.text import Text  
