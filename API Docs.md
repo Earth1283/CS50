@@ -54,8 +54,10 @@ Please note that the `getLon` and the `getLat` methods require a **functional** 
 ## Sysinfo
 You can request system information without the need for a permission request
 You may call the sysInfo api in the following method:
+
 ```python
-from sysInfo import getOS, getPythonVersion, getMachine, getProcessor, getPlatform
+from sys_info import getOS, getPythonVersion, getMachine, getProcessor, getPlatform
+
 # These functions return their respective reponces with the `platform` package
 print(f"Your OS is {getOS()} which is running Pythux on {getPythonVersion()}")
 ```

@@ -9,6 +9,7 @@ class AppStorageError(Exception): # New way of moaning :D
     pass
 
 def _validate_identifier(name: str):
+    """Private helper method so that pylint doesnt freak out"""
     if not name or not name.isidentifier():
         raise AppStorageError(f"Invalid app name: '{name}'. App name must be a valid identifier.")
 

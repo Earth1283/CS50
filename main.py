@@ -9,7 +9,7 @@ from helper import printWelcome, applicationError
 from logger import file_log as fl
 from todo import toDo
 from utility import checkInternet
-from weather import weather
+from weather import Weather
 
 install(show_locals=True)
 from rich.console import Console
@@ -100,7 +100,7 @@ def application_hub():
     Handles the application selection and execution loop.
     """
     applications = {
-        "1": lambda: weather.main(""),
+        "1": lambda: Weather.main(""),
         "2": toDo.main,
         "onboarding": run_onboarding,
         "exit": lambda: exit(0),

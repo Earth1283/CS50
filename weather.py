@@ -1,9 +1,10 @@
-import requests
+import json
 # we want to read from the config.db file
 import sqlite3
-import json
-from rich import print_json # for debugging purposes
+
+import requests
 from rich.console import Console
+
 console = Console()
 from rich.traceback import install
 install(show_locals=True)
@@ -12,9 +13,9 @@ from location_services import getLat, getLon, requestPerms
 from rich.panel import Panel
 from rich.text import Text
 from rich.box import ROUNDED
-class weather:
+class Weather:
     @staticmethod
-    def getConfigValue(db_path: str, key_name: str) -> dict:
+    def get_config_value(db_path: str, key_name: str) -> dict:
         config_dict = {}
         conn = None
         try:
@@ -36,8 +37,9 @@ class weather:
                 conn.close()
                 conn.close()
         return config_dict
-    def main(self):
-        configValue = weather.getConfigValue("config/config.db", "weatherConfig")
+    @staticmethod
+    def main():
+        configValue = Weather.get_config_value("config/config.db", "weatherConfig")
         # Now let's parse the configValue
         apiKey = configValue["openWeatherMapAPIKey"]
         if requestPerms("Weather", "Know your location for weather reports"): # Use new api
@@ -58,7 +60,7 @@ class weather:
                 print(f"Your Latitude is {lat} and longitude is {lon}")
                 # now with this, call the main api
                 r = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={apiKey}&units=metric")
-                apiJson = r.json()
+                api_json = r.json()
                 # We want to check if the key is valid (reject 401)
                 # Then we want to parse the weather info
                 if r.status_code == 401:
@@ -76,7 +78,7 @@ class weather:
                     raise ValueError("Invalid API Key or unauthorized access")
                 else:
                     # Parse weather info
-                    current = apiJson.get("current", {})
+                    current = api_json.get("current", {})
                     weather_desc = current.get("weather", [{}])[0].get("description", "N/A").capitalize()
                     temp = current.get("temp", "N/A")
                     feels_like = current.get("feels_like", "N/A")
