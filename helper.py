@@ -74,16 +74,17 @@ def printWelcome():
 
     console.print(Align.center(finalBox))
 
-# Previous todo completed
-# TODO: fix logger
-
-def applicationError(appName: str, error: str, explainError: Optional[str] = None) -> None:
-    if explainError:
+def application_error(app_name: str, error: str, explain_error: Optional[str] = None) -> None:
+    if explain_error:
         print()
-        print(Panel(f"The application {appName} crashed due to {error}. Further explanation of this error:\n{explainError}", title="Application Crash Report", style="#CE2029"))
-        fl.fatal(f"A fatal error occured while executing {appName}. The application crashed due to {error}. It is recommended to check the logs")
+        print(Panel(f"The application {app_name} crashed due to {error}. Further explanation of this error:\n"
+                    f"{explain_error}", title="Application Crash Report", style="#CE2029"))
+        fl.fatal(f"A fatal error occurred while executing {app_name}. The application crashed due to {error}. "
+                 f"It is recommended to check the logs")
     else:
         print()
-        print(Panel(f"The application {appName} crashed due to {error}.\nAn unhandled error occurred while the application was executing. No further information was given", title="Application Crash Report",
+        print(Panel(f"The application {app_name} crashed due to {error}."
+                    f"\nAn unhandled error occurred while the application was executing. No further information was given",
+                    title="Application Crash Report",
                     style="#CE2029"))
-        fl.fatal(f"A fatal error occured while executing {appName}. Check previous logs for more insights")
+        fl.fatal(f"A fatal error occurred while executing {app_name}. Check previous logs for more insights")

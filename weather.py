@@ -13,6 +13,7 @@ from location_services import getLat, getLon, requestPerms
 from rich.panel import Panel
 from rich.text import Text
 from rich.box import ROUNDED
+
 class Weather:
     @staticmethod
     def get_config_value(db_path: str, key_name: str) -> dict:
@@ -39,16 +40,16 @@ class Weather:
         return config_dict
     @staticmethod
     def main():
-        configValue = Weather.get_config_value("config/config.db", "weatherConfig")
-        # Now let's parse the configValue
-        apiKey = configValue["openWeatherMapAPIKey"]
+        config_value = Weather.get_config_value("config/config.db", "weatherConfig")
+        # Now let's parse the config_value
+        api_key = config_value["openWeatherMapAPIKey"]
         if requestPerms("Weather", "Know your location for weather reports"): # Use new api
-            if apiKey == "your API key here":
+            if api_key == "your API key here":
                 fl.logger(LogLevel.FATAL, "FATAL FROM WEATHER: Api key unusable")
-                moanText = Text("Unable to retrieve weather info\nReason: user did not specify an usable API key", style="#FF1100", justify="center")
+                moan_text = Text("Unable to retrieve weather info\nReason: user did not specify an usable API key", style="#FF1100", justify="center")
                 console.print(
                     Panel(
-                        moanText,
+                        moan_text,
                         title="Error",
                         border_style="#FF1100"
                     ), justify="center"
@@ -59,16 +60,16 @@ class Weather:
                 lon = getLon()
                 print(f"Your Latitude is {lat} and longitude is {lon}")
                 # now with this, call the main api
-                r = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={apiKey}&units=metric")
+                r = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=metric")
                 api_json = r.json()
                 # We want to check if the key is valid (reject 401)
                 # Then we want to parse the weather info
                 if r.status_code == 401:
                     fl.logger(LogLevel.FATAL, "FATAL FROM WEATHER: Invalid API key or unauthorized access")
-                    moanText = Text("Unable to retrieve weather info\nReason: Invalid API key or unauthorized access", style="#FF1100", justify="center")
+                    moan_text = Text("Unable to retrieve weather info\nReason: Invalid API key or unauthorized access", style="#FF1100", justify="center")
                     console.print(
                         Panel(
-                            moanText,
+                            moan_text,
                             title="Error",
                             border_style="#FF1100",
                             width=80,
@@ -108,9 +109,9 @@ class Weather:
                     )
 
         else:
-            moanText = Text("Unable to retrieve weather info\nReason: Disallowed IP adress locator service", style="#FF1100", justify="center")
+            moan_text = Text("Unable to retrieve weather info\nReason: Disallowed IP adress locator service", style="#FF1100", justify="center")
             console.print(Panel(
-                moanText,
+                moan_text,
                 title="Error",
                 border_style="#FF1100",
                 width=80,

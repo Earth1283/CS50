@@ -5,7 +5,7 @@ import time
 import bcrypt
 from rich.traceback import install
 
-from helper import printWelcome, applicationError
+from helper import printWelcome, application_error
 from logger import file_log as fl
 from todo import toDo
 from utility import checkInternet
@@ -113,7 +113,7 @@ def application_hub():
                 try:
                     applications[application]()
                 except Exception as e:
-                    applicationError(application, f"Other Unhandled Error: {type(e).__name__}: {e}")
+                    application_error(application, f"Other Unhandled Error: {type(e).__name__}: {e}")
             else:
                 console.print("[red]Invalid application[/red]")
             
