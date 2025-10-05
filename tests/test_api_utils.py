@@ -1,4 +1,3 @@
-import pytest
 from unittest.mock import patch, Mock
 import sys
 import os
@@ -22,6 +21,9 @@ def test_query_list_simple():
     db = ['apple', 'banana', 'cherry']
     assert utils.query('banana', db) == True
     assert utils.query('orange', db) == False
+    assert utils.query('somerandomcrap', db) == False
+    db.append("abcdefg")
+    assert utils.query('ab*', db, regex=True) == True
 
 def test_query_list_case_insensitive():
     db = ['Apple', 'Banana', 'Cherry']
@@ -52,11 +54,13 @@ def test_query_not_found():
 def test_validate_email_valid():
     assert utils.validate_email('test@example.com') == True
     assert utils.validate_email('user.name+tag@gmail.co.uk') == True
+    assert utils.validate_email('someRandomdude.somewhere+weird@radomsitedoman.com')
 
 def test_validate_email_invalid():
     assert utils.validate_email('test@.com') == False
     assert utils.validate_email('test@com') == False
     assert utils.validate_email('test.com') == False
+    assert utils.validate_email('bad@email@address@here') == False
     assert utils.validate_email('') == False
 
 # Tests for check_url
