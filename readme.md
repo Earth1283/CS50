@@ -7,6 +7,9 @@
 ![Weird Stuff](https://img.shields.io/badge/Unit_tests-Passing_if_you_run_a_second_time-lightgreen)
 [![linting](https://github.com/Earth1283/CS50/actions/workflows/pylint.yml/badge.svg)](https://github.com/Earth1283/CS50/actions/workflows/pylint.yml)
 
+**Greatest accomplishment in my life:**
+[![PyTest](https://github.com/Earth1283/CS50/actions/workflows/pytest.yml/badge.svg)](https://github.com/Earth1283/CS50/actions/workflows/pytest.yml)
+
 This ~~madman~~ CS50 programmer tried to implement Linux with Python 3.12.
 ## Core Ideologies
 The core of this program is to make this extremely friendly for the user
