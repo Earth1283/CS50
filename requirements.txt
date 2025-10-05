@@ -1,0 +1,6 @@
+bcrypt
+rich
+requests
+PyYAML
+pylint
+pytest
