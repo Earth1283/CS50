@@ -1,5 +1,6 @@
-from logger import file_log as fl
+from .logger import fileLog as fl
 import os
+import requests
 def validate_json(
         json_input:dict
 ) -> bool:
@@ -84,14 +85,9 @@ def check_url(
         desiredTimeout:int | None=5
 ) -> bool:
     try:
-        import requests
-
         response = requests.head(url, timeout=desiredTimeout)
 
         return response.status_code < 400 # return true for 2xx nd 3xx code
-    except ImportError:
-        fl.error("Unable to send requests to the URI: Requests not installed!")
-        return False
     except requests.exceptions.RequestException: #type:ignore vscode being dumb
         return False
     
