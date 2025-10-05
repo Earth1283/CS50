@@ -17,5 +17,4 @@ undefined
 /etc/
 /memory
 /applications
-/tests/
 api/__pycache__/logger.cpython-313.pyc
