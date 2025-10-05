@@ -130,24 +130,6 @@ def is_directory(path: str) -> bool:
     """
     return os.path.isdir(path)
 
-
-def mkdir(path: str,
-          exist_ok: bool = True
-          ) -> None:
-    """
-    Creates a directory at the given path.
-
-    Args:
-        path (str): The path where the directory should be created.
-        exist_ok (bool): If False, raise an exception if the target directory already exists.
-                         If True (default), silently succeed if the target directory exists.
-
-    Raises:
-        OSError: If the directory cannot be created and exist_ok is False.
-    """
-    os.makedirs(path, exist_ok=exist_ok)
-
-
 def rm(path: str,
        recursive: bool = False
        ) -> None:
