@@ -1,3 +1,7 @@
+import time
+import csv
+import os
+
 from rich.panel import Panel
 from rich.text import Text
 from rich.console import Console
@@ -6,18 +10,16 @@ from todo_helper import parseTodo, validated
 from api.logger import fileLog as fl
 from rich.box import ROUNDED
 from rich.align import Align
-import time
-import csv
-import os
 
-console = Console()
-todoFile = 'root/documents/todo.csv'
+console = Console() # creates console obj
+
+todo_file = 'root/documents/todo.csv'
 
 def getTasks():
     """Reads all tasks from the CSV file."""
-    if not os.path.exists(todoFile):
+    if not os.path.exists(todo_file):
         return []
-    with open(todoFile, mode='r', newline='', encoding='utf-8') as file:
+    with open(todo_file, mode='r', newline='', encoding='utf-8') as file:
         reader = csv.reader(file)
         try:
             # Skip header
@@ -35,12 +37,12 @@ def getTasks():
 
 def writeTasks(tasks):
     """Writes a list of tasks to the CSV file, overwriting it."""
-    with open(todoFile, mode='w', newline='', encoding='utf-8') as file:
+    with open(todo_file, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow(['taskName', 'taskInfo', 'status', 'priority'])  # Write header
         writer.writerows(tasks)
 
-class toDo():
+class ToDo():
     @staticmethod
     def main():
         console.clear()
@@ -48,8 +50,8 @@ class toDo():
         console.print(initialText)
 
         # Ensure the CSV file and directory exist
-        os.makedirs(os.path.dirname(todoFile), exist_ok=True)
-        if not os.path.exists(todoFile):
+        os.makedirs(os.path.dirname(todo_file), exist_ok=True)
+        if not os.path.exists(todo_file):
             # Create the file with a header if it doesn't exist
             writeTasks([])
 
@@ -86,7 +88,7 @@ class toDo():
                             taskDetails = input("▶ ").strip()
 
                         newTask = [taskName, taskDetails, "incomplete", "Medium"]
-                        with open(todoFile, 'a', newline='', encoding='utf-8') as file:
+                        with open(todo_file, 'a', newline='', encoding='utf-8') as file:
                             writer = csv.writer(file)
                             writer.writerow(newTask)
                         
@@ -246,9 +248,5 @@ def displayAndGetTasks():
     console.print(Align.center(table))
     return tasks
 
-def initialize():
-    toDo.main()
-
-
 if __name__ == "__main__":
-    initialize()
+    ToDo.main()
