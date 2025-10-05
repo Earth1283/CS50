@@ -125,6 +125,7 @@ def file_system_helper(
             try:
                 with open(f"{target}", "r") as file:
                     return file.read()
+                return True
             except:
                 return False
         case "write":
