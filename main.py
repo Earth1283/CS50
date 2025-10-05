@@ -35,7 +35,7 @@ def main():
         handle_password_authentication()
     else:
         create_password()
-    
+
     fl.log("Initializing user ui")
     console.clear()
     printWelcome()
@@ -118,7 +118,7 @@ def application_hub():
                     application_error(application, f"Other Unhandled Error: {type(e).__name__}: {e}")
             else:
                 console.print("[red]Invalid application[/red]")
-            
+
             if application not in ["exit", "onboarding"]:
                 console.clear()
                 printWelcome()
@@ -163,7 +163,7 @@ def pass_exsists() -> bool:
     except:
         # something bad happened lol
         os.makedirs("etc")
-        if not file_system_helper("etc/psswrd.txt", "touch"): 
+        if not file_system_helper("etc/psswrd.txt", "touch"):
             raise OSError("Bad API? File creation error?")
 
 if __name__ == "__main__":

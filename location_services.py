@@ -5,7 +5,7 @@ from typing import Optional, Dict, Union
 from logger import file_log as fl
 from rich import print
 from rich.panel import Panel
-from rich.text import Text  
+from rich.text import Text
 from rich.console import Console
 console = Console()
 

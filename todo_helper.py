@@ -14,7 +14,7 @@ def noData():
     noDataText = Text("There are currently no tasks in your to-do list!\nAdd a task to get started!", justify="center")
     noDataPanel = Panel(noDataText, style="#FFAE00", width=80, padding=(1, 1), title="To-Do List")
     console.print(noDataPanel)
-    
+
 def parseTodo():
     """
     Parses and displays todo data from the CSV file.
@@ -24,7 +24,7 @@ def parseTodo():
             # Using DictReader is great for this
             reader = csv.DictReader(file)
             tasks = list(reader)
-        
+
         if not tasks:
             noData()
             return
@@ -33,7 +33,7 @@ def parseTodo():
         table.add_column("Task Name", style="cyan", no_wrap=True)
         table.add_column("Task Info", style="green")
         table.add_column("Task Status", style="yellow")
-        
+
         statusStyles = {
             'complete': "#26FF00",
             'in progress': "#F0FF50",

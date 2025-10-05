@@ -66,21 +66,21 @@ class ToDo():
                 option4 = Text("[4] - Advanced task manipulation", justify="center")
                 quitText = Text("Note, you can exit with \"Control + D\"", justify="center")
                 console.print(f"\n{option1}\n{option2}\n{option3}\n{option4}\n\n{quitText}")
-                
+
                 desiredFunction = 0
                 while not validated(desiredFunction):
                     try:
                         desiredFunction = int(input("Please enter your desired function\n▶ ").strip())
                     except (ValueError, TypeError):
                         console.print("[bold]Please enter a valid option![/bold]", style="#FF0000")
-                
+
                 match desiredFunction:
                     case 1: # Create a new task
                         taskName = input("Enter the task name (max 40 chars):\n▶ ").strip()
                         while len(taskName) > 40:
                             console.print("[red]Oops, that name is too long. Keep it under 40 characters.[/red]")
                             taskName = input("▶ ").strip()
-                        
+
                         taskDetails = input("Enter the task details (max 100 chars):\n▶ ").strip()
                         while len(taskDetails) > 100:
                             console.print("[red]Those details are a bit long. Keep it under 100 characters.[/red]")
@@ -91,7 +91,7 @@ class ToDo():
                         with open(todo_file, 'a', newline='', encoding='utf-8') as file:
                             writer = csv.writer(file)
                             writer.writerow(newTask)
-                        
+
                         fl.log(f"Written new task '{taskName}' to CSV")
                         console.print(f"[green]Task '{taskName}' added![/green]")
 
@@ -100,7 +100,7 @@ class ToDo():
                         tasks = displayAndGetTasks()
                         if not tasks:
                             return
-                        
+
                         try:
                             taskIdStr = console.input("Enter the [bold]ID[/bold] of the task you'd like to edit\n▶  ").strip()
                             taskId = int(taskIdStr)
@@ -108,12 +108,12 @@ class ToDo():
                             if not 1 <= taskId <= len(tasks):
                                 console.print("[red]Invalid task ID. That number is not in the list.[/red]")
                                 return
-                            
+
                             taskToEdit = tasks[taskId - 1]
                             oldName = taskToEdit[0]
 
                             console.print(f"[green]↓ Note: You are currently editing this task ↓[/green]\n[cyan]{oldName}[/cyan]")
-                            
+
                             newName = console.input(f"Enter new name or press Enter to keep ([italic]{taskToEdit[0]}[/italic]):\n▶ ").strip() or taskToEdit[0]
                             newInfo = console.input(f"Enter new description or press Enter to keep ([italic]{taskToEdit[1]}[/italic]):\n▶ ").strip() or taskToEdit[1]
 
@@ -125,7 +125,7 @@ class ToDo():
 
                             tasks[taskId - 1] = [newName, newInfo, newStatus, taskToEdit[3]]
                             writeTasks(tasks)
-                            
+
                             console.print(f"[green]Successfully updated task '{newName}'![/green]")
                             fl.log(f"Updated task, new name is '{newName}'.")
 
@@ -147,7 +147,7 @@ class ToDo():
                                 return
 
                             taskToDeleteName = tasks[taskId - 1][0]
-                            
+
                             confirmation = console.input(f"[bold red]WARNING[/bold red]: Are you sure you want to delete '[bold cyan]{taskToDeleteName}[/bold cyan]'? This cannot be underdone! (y/n)\n▶ ").strip().lower()
 
                             if confirmation == 'y':
@@ -160,7 +160,7 @@ class ToDo():
 
                         except ValueError:
                             console.print(f"[bold red]An error occurred: Please enter a valid number.[/bold red]")
-                    
+
                     case 4: # Advanced task manipulation
                         console.print("[bold cyan]Advanced Task Manipulation[/bold cyan]")
                         tasks = displayAndGetTasks()
@@ -176,7 +176,7 @@ class ToDo():
                                 console.print("[red]Invalid task ID. That number is not in the list.[/red]")
                                 time.sleep(1.5)
                                 continue
-                            
+
                             taskToChange = tasks[taskId - 1]
                             console.print(f"Selected Task: [cyan]{taskToChange[0]}[/cyan] (Current Priority: [yellow]{taskToChange[3]}[/yellow])")
 
@@ -195,7 +195,7 @@ class ToDo():
                                 fl.log(f"Updated task priority for '{taskToChange[0]}'.")
                             else:
                                 console.print(f"[red]Invalid priority. Please choose from {', '.join(priority_options)}.[/red]")
-                            
+
                             time.sleep(1.5)
 
                         except ValueError:
@@ -212,14 +212,14 @@ def displayAndGetTasks():
     if not tasks:
         console.print(Panel(Text("No tasks found. Add one to get started!", justify="center"), title="To-Do List", style="yellow", width=80))
         return None
-    
+
     table = Table(title="Your To-Do list", box=ROUNDED, border_style="cyan", width=80)
     table.add_column("ID", style="magenta", justify="right")
     table.add_column("Task Name", style="cyan", no_wrap=True)
     table.add_column("Task Info", style="green")
     table.add_column("Status", style="yellow")
     table.add_column("Priority", style="blue") # New column
-    
+
     statusStyles = {
         'complete': "green",
         'in progress': "yellow",
@@ -230,7 +230,7 @@ def displayAndGetTasks():
         'Medium': "yellow",
         'Low': "green"
     }
-    
+
     for i, taskRow in enumerate(tasks, 1):
         if len(taskRow) < 4: # Backward compatibility
             taskRow.append("Medium")
@@ -244,7 +244,7 @@ def displayAndGetTasks():
             f'[{status_style}]{status.capitalize()}[/]',
             f'[{priority_style}]{priority}[/]' # Add priority to row
         )
-        
+
     console.print(Align.center(table))
     return tasks
 

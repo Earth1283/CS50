@@ -54,7 +54,7 @@ def query(
             database = [str(item).lower() for item in database]
         elif isinstance(database, dict):
             database = {k.lower(): v for k, v in database.items()}
-    
+
     if strip_spaces:
         target = target.strip()
         if isinstance(database, list) or isinstance(database, set):
@@ -79,7 +79,7 @@ def validate_email(email: str) -> bool:
     import re
     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     return bool(re.match(pattern, email))
-    
+
 def check_url(
         url:str,
         desiredTimeout:int | None=5
@@ -90,7 +90,7 @@ def check_url(
         return response.status_code < 400 # return true for 2xx nd 3xx code
     except requests.exceptions.RequestException: #type:ignore vscode being dumb
         return False
-    
+
 def make_an_array(
     *args:str
 ) -> list:
@@ -163,7 +163,7 @@ def file_system_helper(
                     return True
             except:
                 return False # if anything goes south, its cooked
-            
+
         case "touch":
             try:
                 with open(f"{target}", "x") as file:
