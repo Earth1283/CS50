@@ -9,7 +9,7 @@ from rich.traceback import install
 from helper import printWelcome, application_error
 from logger import file_log as fl
 from todo import ToDo
-from utility import checkInternet
+from utility import check_internet
 from weather import Weather
 from api.utils import file_system_helper
 
@@ -146,7 +146,7 @@ def checkConnection() -> None:
     """
     Checks for an internet connection and displays a warning if there is no connection.
     """
-    if not checkInternet():
+    if not check_internet():
         fl.error("No internet connection detected")
         noInternet = Text("Your internet connection is not working!\n Weather app will be dysfunctional!", justify="center", style="bold red")
         console.print(Panel(noInternet, title="No Internet Connection", border_style="red", padding=(1, 2), style="bold red on white"))
@@ -165,6 +165,8 @@ def pass_exsists() -> bool:
         os.makedirs("etc")
         if not file_system_helper("etc/psswrd.txt", "touch"):
             raise OSError("Bad API? File creation error?")
+    
+    return False
 
 if __name__ == "__main__":
     main()
