@@ -11,6 +11,7 @@ from api import utils
 # Tests for validate_json
 def test_validate_json_valid():
     assert utils.validate_json({'a': 1, 'b': 'text'}) == True
+    assert utils.validate_json({'somerandomthing': 999, 'anotherwieridthing': 'some txt'}) == True
 
 def test_validate_json_invalid():
     # Sets are not JSON serializable
@@ -89,6 +90,10 @@ def test_make_an_array():
     assert utils.make_an_array('a', 'b', 'c') == ['a', 'b', 'c']
     assert utils.make_an_array(1, 2, 3) == [1, 2, 3]
     assert utils.make_an_array() == []
+
+def test_make_an_array_advanced():
+    assert utils.make_an_array('12345', '1234', '123', '12', '1') == ['12345', '1234', '123', '12', '1']
+    assert len(utils.make_an_array('1234', '4321', '0000')) == 3
 
 # Tests for fileExsists
 def test_fileExsists(tmp_path):
