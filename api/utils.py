@@ -92,7 +92,7 @@ def check_url(
         return False
 
 def make_an_array(
-    *args:str
+    *args:str | int | float
 ) -> list:
     """
     Takes any number of arguments and returns them as a list.
