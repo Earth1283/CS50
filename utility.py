@@ -1,6 +1,16 @@
 import requests
 from logger import file_log as fl, LogLevel
-def checkInternet():
+"""
+  _   _  ____ _______ _____ _____ ______ 
+ | \ | |/ __ \__   __|_   _/ ____|  ____|
+ |  \| | |  | | | |    | || |    | |__   
+ | . ` | |  | | | |    | || |    |  __|  
+ | |\  | |__| | | |   _| || |____| |____ 
+ |_| \_|\____/  |_|  |_____\_____|______|
+
+!!! THIS METHOD WILL BE MOVED TO api/utils SOON!!!
+"""
+def check_internet():
     """
     This function will run async tasks on startup
     """
@@ -12,5 +22,3 @@ def checkInternet():
     except requests.ConnectionError:
         fl.logger(LogLevel.INFO, "No internet connection detected")
         return False
-
-# Depreciated the getweather function in favor of the real application
