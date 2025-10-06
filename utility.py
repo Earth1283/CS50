@@ -8,7 +8,7 @@ from logger import file_log as fl, LogLevel
  | |\  | |__| | | |   _| || |____| |____ 
  |_| \_|\____/  |_|  |_____\_____|______|
 
-!!! THIS METHOD WILL BE MOVED TO api/utils SOON!!!
+!!! THIS METHOD WILL BE TRASHED SOON!!!
 """
 def check_internet():
     """

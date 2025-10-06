@@ -1,4 +1,4 @@
-from .logger import fileLog as fl
+from .logger import fileLog as fl, LogLevel
 import os
 import requests
 def validate_json(
@@ -170,3 +170,12 @@ def file_system_helper(
                     return True
             except: # it exsists
                 return False
+
+def test_internet() -> bool:
+    try:
+        requests.get("https://www.google.com", timeout=5)
+        fl.logger(LogLevel.INFO, "Internet connection is OK")
+        return True
+    except requests.ConnectionError:
+        fl.logger(LogLevel.INFO, "No internet connection detected")
+        return False
