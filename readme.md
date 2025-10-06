@@ -26,7 +26,7 @@ The user's privacy will be put in the first place, so please refer to the **Perm
 - ✅ Multithreaded background application execution support
 ## Upcoming Features / Todo
 - 🔔 Expandable & Usable API for user extendable programs
-- 🔔 Better TUI framework for a more responsive user interface (this will probably be the `textual` framework)
+- 🔔 Better TUI framework for a more responsive user interface (this will probably be the `textual` framework, but in the short term, an integration with `inquirer` is better)
 ## Core Technologies
 I used `rich` as a library for color rendering of terminal output and coloring it.
 The `bcrypt` library was used to store & hash user passwords in `etc/psswd`
@@ -43,3 +43,7 @@ Application developers will have to **ask for your permission** to have access t
 Application developers will **NEVER** have access to the following information from our APIs:
 - Your Password (from `etc/psswrd`) -- even if they get the file, its encrypted with `bcrypt` so your password is safe!
 - Your directories from other than `root/dektop` and `root/documents`
+
+# FAQ
+## Q: Why is there some bash scripts?
+A: I use bash to clean up `pytest` and `__pycache__` cache files because they mess with my file dirs and make things hard to navigate
