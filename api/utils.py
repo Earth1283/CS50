@@ -1,6 +1,8 @@
 from .logger import fileLog as fl, LogLevel
 import os
 import requests
+import random
+
 def validate_json(
         json_input:dict
 ) -> bool:
