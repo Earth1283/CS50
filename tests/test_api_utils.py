@@ -153,29 +153,45 @@ def test_file_system_helper_write_no_payload(tmp_path):
 MOCK_PATH = "api.utils.random.randint" 
 
 
-@pytest.mark.parametrize("v1, v2", [
-    (10, 5),    # v1 > v2 (No swap)
-    (5, 10),    # v1 < v2 (Swap expected)
-    (7, 7)      # v1 == v2 (Edge of no swap)
+@pytest.mark.parametrize("v1, v2, expected_min, expected_max", [
+    # Original Test Cases
+    (10, 5, 5, 10),     # v1 > v2 (No swap)
+    (5, 10, 5, 10),     # v1 < v2 (Swap expected)
+    (7, 7, 7, 7),       # v1 == v2 (Edge of no swap)
+    
+    # New Test Cases: Negative Numbers
+    (-10, -5, -10, -5), # Both negative, v1 < v2 (Swap expected: min=-10, max=-5)
+    (-5, -10, -10, -5), # Both negative, v1 > v2 (No swap: min=-10, max=-5)
+    
+    # New Test Cases: Zero and Mixed Sign
+    (0, 5, 0, 5),       # Zero and positive, v1 < v2 (Swap expected)
+    (5, 0, 0, 5),       # Zero and positive, v1 > v2 (No swap)
+    (-5, 0, -5, 0),     # Zero and negative, v1 < v2 (Swap expected)
+    (0, -5, -5, 0),     # Zero and negative, v1 > v2 (No swap)
+    
+    # New Test Cases: Large Numbers (Ensuring performance isn't an issue)
+    (1000000, 1, 1, 1000000), 
+    (1, -1000000, -1000000, 1)
+
 ])
-
 @patch(MOCK_PATH)
-
-def test_randint(mock_randint, v1, v2): #ug life is hard
+def test_randint_handles_all_limits_correctly(mock_randint, v1, v2, expected_min, expected_max):
     """
-    Tests that the function handles the swap logic and calls random.randint correctly.
+    Tests that:
+    1. The function always calls random.randint with the limits correctly ordered as (min, max).
+    2. The function returns the exact mocked value.
     """
-    # Arrange
+    # 1. Arrange
+    # A known return value, which should be within the bounds of any test case
     MOCKED_RETURN_VALUE = 42 
     mock_randint.return_value = MOCKED_RETURN_VALUE
     
-    # Act
+    # 2. Act
     result = utils.randint(v1, v2)
     
-    # Assert
-    expected_val1 = max(v1, v2) 
-    expected_val2 = min(v1, v2)
+    # 3. Assert
+    # Assert random.randint was called with the correct (min, max) range
+    mock_randint.assert_called_once_with(expected_min, expected_max)
     
-    # Assert random.randint was called with the ordered values (min, max)
-    mock_randint.assert_called_once_with(expected_val2, expected_val1)
+    # Assert the function returned the mocked value
     assert result == MOCKED_RETURN_VALUE
