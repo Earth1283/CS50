@@ -181,3 +181,12 @@ def test_internet() -> bool:
     except requests.ConnectionError:
         fl.logger(LogLevel.INFO, "No internet connection detected")
         return False
+
+def randint(
+        val1:int,
+        val2:int
+) -> int:
+    lower_bound = min(val1, val2)
+    upper_bound = max(val1, val2)
+    
+    return random.randint(lower_bound, upper_bound)
