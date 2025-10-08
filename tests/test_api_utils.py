@@ -3,6 +3,8 @@ import sys
 import os
 import requests
 
+import pytest
+
 # Add the root directory to the python path to allow for imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -146,3 +148,34 @@ def test_file_system_helper_invalid_action(tmp_path):
 def test_file_system_helper_write_no_payload(tmp_path):
     p = tmp_path / "test.txt"
     assert utils.file_system_helper(str(p), 'write') == False
+
+
+MOCK_PATH = "api.utils.random.randint" 
+
+
+@pytest.mark.parametrize("v1, v2", [
+    (10, 5),    # v1 > v2 (No swap)
+    (5, 10),    # v1 < v2 (Swap expected)
+    (7, 7)      # v1 == v2 (Edge of no swap)
+])
+
+@patch(MOCK_PATH)
+
+def test_randint(mock_randint, v1, v2): #ug life is hard
+    """
+    Tests that the function handles the swap logic and calls random.randint correctly.
+    """
+    # Arrange
+    MOCKED_RETURN_VALUE = 42 
+    mock_randint.return_value = MOCKED_RETURN_VALUE
+    
+    # Act
+    result = utils.randint(v1, v2)
+    
+    # Assert
+    expected_val1 = max(v1, v2) 
+    expected_val2 = min(v1, v2)
+    
+    # Assert random.randint was called with the ordered values (min, max)
+    mock_randint.assert_called_once_with(expected_val2, expected_val1)
+    assert result == MOCKED_RETURN_VALUE
