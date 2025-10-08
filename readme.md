@@ -12,7 +12,7 @@
 
 This ~~madman~~ CS50 programmer tried to implement Linux with Python 3.12.
 ## Core Ideologies
-The core of this program is to make this extremely friendly for the user
+The core of this program is to make this extremely friendly for the end user
 
 My goal is so that anyone who has not yet read the documentation to be **easily** able to read and execute my program
 
