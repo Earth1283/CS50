@@ -165,7 +165,7 @@ def pass_exsists() -> bool:
         os.makedirs("etc")
         if not file_system_helper("etc/psswrd.txt", "touch"):
             raise OSError("Bad API? File creation error?")
-    
+
     return False
 
 if __name__ == "__main__":

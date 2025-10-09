@@ -188,5 +188,5 @@ def randint(
 ) -> int:
     lower_bound = min(val1, val2)
     upper_bound = max(val1, val2)
-    
+
     return random.randint(lower_bound, upper_bound)
