@@ -7,7 +7,7 @@ from logger import LogLevel
 
 applications: List[Dict] = []
 
-def loadApplications():
+def load_applications():
     global applications
     applications.clear()
 
@@ -76,4 +76,5 @@ def loadApplications():
 
 # Initialize on import
 current_file_path = os.path.abspath(__file__)
-loadApplications()
+
+load_applications()
