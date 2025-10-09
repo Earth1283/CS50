@@ -47,7 +47,7 @@ def run_startup_tasks():
     Run startup tasks in parallel.
     """
     threads = [
-        threading.Thread(target=checkConnection)
+        threading.Thread(target=check_connection)
     ]
     for t in threads:
         t.start()
@@ -63,8 +63,8 @@ def handle_password_authentication():
         stored_hash = pswd.read().strip()
     while True:
         try:
-            userPassword = getpass.getpass("What is your password? Press CONTROL+C to quit\n▶ ").strip()
-            if bcrypt.checkpw(userPassword.encode('utf-8'), stored_hash):
+            user_password = getpass.getpass("What is your password? Press CONTROL+C to quit\n▶ ").strip()
+            if bcrypt.checkpw(user_password.encode('utf-8'), stored_hash):
                 print("[green]Password correct.[/green]\n[green]Authenticated[/green]")
                 fl.log("Password check successful")
                 break
@@ -83,17 +83,17 @@ def create_password():
     """
     while True:
         console.print("Please enter your desired password. It must be at least 8 digits and at maximum 72 digits.\nIt is recommended to include [red]special characters[/red], [red]numbers[/red], and a [red]mix of upper and lowercase letters[/red]")
-        dontWorry = Text("Do not worry if you cannot see any of your typed text; this is for your privacy! The terminal can still read your input.", justify="center", style="08A1FC")
-        console.print(dontWorry)
-        desiredPassword = getpass.getpass("Your Password is: ")
-        if len(desiredPassword) < 8:
+        dont_worry = Text("Do not worry if you cannot see any of your typed text; this is for your privacy! The terminal can still read your input.", justify="center", style="08A1FC")
+        console.print(dont_worry)
+        desired_password = getpass.getpass("Your Password is: ")
+        if len(desired_password) < 8:
             print("[red]Your password does not meet the required safety guidelines of at least 8 chars. Please choose a stronger password.[/red]")
-        elif len(desiredPassword) > 72:
+        elif len(desired_password) > 72:
             print("[red]Your password is too long! Choose a shorter one[/red]")
         else:
-            hashedPassword = bcrypt.hashpw(desiredPassword.encode('utf-8'), bcrypt.gensalt(14))
+            hashed_password = bcrypt.hashpw(desired_password.encode('utf-8'), bcrypt.gensalt(14))
             with open('etc/psswrd.txt', 'w') as file:
-                file.write(str(hashedPassword)) # force it back to a str
+                file.write(str(hashed_password)) # force it back to a str
             break
 
 
@@ -142,14 +142,14 @@ def run_onboarding():
     console.clear()
     printWelcome()
 
-def checkConnection() -> None:
+def check_connection() -> None:
     """
     Checks for an internet connection and displays a warning if there is no connection.
     """
     if not check_internet():
         fl.error("No internet connection detected")
-        noInternet = Text("Your internet connection is not working!\n Weather app will be dysfunctional!", justify="center", style="bold red")
-        console.print(Panel(noInternet, title="No Internet Connection", border_style="red", padding=(1, 2), style="bold red on white"))
+        no_internet = Text("Your internet connection is not working!\n Weather app will be dysfunctional!", justify="center", style="bold red")
+        console.print(Panel(no_internet, title="No Internet Connection", border_style="red", padding=(1, 2), style="bold red on white"))
 
 def pass_exsists() -> bool:
     try:
@@ -158,9 +158,8 @@ def pass_exsists() -> bool:
                 return False # might as well mk a new one
             else:
                 return True
-        return False
 
-    except:
+    except FileNotFoundError:
         # something bad happened lol
         os.makedirs("etc")
         if not file_system_helper("etc/psswrd.txt", "touch"):
