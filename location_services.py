@@ -14,8 +14,6 @@ def _get_api_key() -> Optional[str]:
     """
     Connects to the config database and retrieves the OpenWeatherMap API key.
 
-    THIS IS A PRIVATE HELPER FUNCTION
-
     Returns:
         The API key as a string if found, otherwise None.
     """
@@ -105,7 +103,9 @@ def _get_full_geolocation() -> Optional[Dict[str, float]]:
 
 def requestPerms(applicationName, reason): # New requestPermission method
     if reason != "":
-        print(Panel(f"{applicationName} would like access to your geolocation from your IP address for the following reason:\n{reason}", title="Location Services Access Request", style="#89CFF0"))
+        print(Panel(f"{applicationName} would like access to your geolocation from your IP address for the following reason:\n{reason}",
+                    title="Location Services Access Request",
+                    style="#89CFF0"))
         disclaimer = Text(
             "Pythux determines your location via your public IP adress"
             "This could be inaccurate, especially if you are running this on a remote host or VPN"
