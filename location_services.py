@@ -1,12 +1,15 @@
-import requests
-import sqlite3
 import json
-from typing import Optional, Dict, Union
-from logger import file_log as fl
+import sqlite3
+from typing import Optional, Dict
+
+import requests
 from rich import print
+from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
-from rich.console import Console
+
+from logger import file_log as fl
+
 console = Console()
 
 
@@ -101,7 +104,7 @@ def _get_full_geolocation() -> Optional[Dict[str, float]]:
         return None
 
 
-def requestPerms(applicationName, reason): # New requestPermission method
+def request_perms(applicationName, reason): # New requestPermission method
     if reason != "":
         print(Panel(f"{applicationName} would like access to your geolocation from your IP address for the following reason:\n{reason}",
                     title="Location Services Access Request",
@@ -135,13 +138,13 @@ def requestPerms(applicationName, reason): # New requestPermission method
             case _:
                 return False
 
-def getLat() -> Optional[float]:
+def get_lat() -> Optional[float]:
     # Get lat from ip
     geo_data = _get_full_geolocation()
     return geo_data.get("lat") if geo_data else None
 
 
-def getLon() -> Optional[float]:
+def get_lon() -> Optional[float]:
     # Get lon from ip
     geo_data = _get_full_geolocation()
     return geo_data.get("lon") if geo_data else None

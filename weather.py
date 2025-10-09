@@ -9,7 +9,7 @@ console = Console()
 from rich.traceback import install
 install(show_locals=True)
 from logger import file_log as fl, LogLevel
-from location_services import getLat, getLon, requestPerms
+from location_services import get_lat, get_lon, request_perms
 from rich.panel import Panel
 from rich.text import Text
 from rich.box import ROUNDED
@@ -43,7 +43,7 @@ class Weather:
         config_value = Weather.get_config_value("config/config.db", "weatherConfig")
         # Now let's parse the config_value
         api_key = config_value["openWeatherMapAPIKey"]
-        if requestPerms("Weather", "Know your location for weather reports"): # Use new api
+        if request_perms("Weather", "Know your location for weather reports"): # Use new api
             if api_key == "your API key here":
                 fl.logger(LogLevel.FATAL, "FATAL FROM WEATHER: Api key unusable")
                 moan_text = Text("Unable to retrieve weather info\nReason: user did not specify an usable API key", style="#FF1100", justify="center")
@@ -56,8 +56,8 @@ class Weather:
                 )
                 raise ValueError("User API Key invalid")
             else:
-                lat = getLat()
-                lon = getLon()
+                lat = get_lat()
+                lon = get_lon()
                 print(f"Your Latitude is {lat} and longitude is {lon}")
                 # now with this, call the main api
                 r = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=metric")

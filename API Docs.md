@@ -43,11 +43,11 @@ This will reutrn with `ValueError` so that application developers can catch bugs
 You can request for the user's location based on their IP addresses (this is inaccurate especially if they are using a VPN or proxy)
 
 ```python
-from location_services import requestPerms, getLon, getLat
+from location_services import request_perms, get_lon, get_lat
 
-requestPerms("Your application's name", "Reason as to why you need the data")
-print(getLon())
-print(getLat())
+request_perms("Your application's name", "Reason as to why you need the data")
+print(get_lon())
+print(get_lat())
 ```
 Please note that the `getLon` and the `getLat` methods require a **functional** Open Weather Map API key configurable in settings.json
 
