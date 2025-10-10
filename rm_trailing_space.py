@@ -55,11 +55,14 @@ def main():
         print("🤷 No Python (.py) files found.")
         return
 
-    print(f"Found {len(python_files)} Python file(s). Starting cleanup...\n")
+    if len(python_files) == 1:
+        print("Found 1 Python file. Starting cleanup...\n")
+    else:
+        print(f"Found {len(python_files)} Python file(s). Starting cleanup...\n")
+
     for filepath in python_files:
         clean_file(filepath)
     print("\n✨ Cleanup complete! Pylint should be happy!")
-
 
 if __name__ == "__main__":
     main()
