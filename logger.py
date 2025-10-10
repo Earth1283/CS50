@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 from enum import Enum
 
-
 def gen_file_name():
     time = datetime.now().strftime("%H-%M-%S")  # Use - instead of : for file safety
     date = datetime.now().strftime("%Y-%m-%d")
