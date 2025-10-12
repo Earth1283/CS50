@@ -9,9 +9,8 @@ from rich.traceback import install
 from helper import printWelcome, application_error
 from logger import file_log as fl
 from todo import ToDo
-from api.utils import check_url
 from weather import Weather
-from api.utils import file_system_helper
+from api.utils import file_system_helper, check_url
 
 install(show_locals=True)
 from rich.console import Console
