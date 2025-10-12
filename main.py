@@ -9,7 +9,7 @@ from rich.traceback import install
 from helper import printWelcome, application_error
 from logger import file_log as fl
 from todo import ToDo
-from utility import check_internet
+from api.utils import check_url
 from weather import Weather
 from api.utils import file_system_helper
 
@@ -146,7 +146,7 @@ def check_connection() -> None:
     """
     Checks for an internet connection and displays a warning if there is no connection.
     """
-    if not check_internet():
+    if not check_url("https://www.python.org", 3):
         fl.error("No internet connection detected")
         no_internet = Text("Your internet connection is not working!\n Weather app will be dysfunctional!", justify="center", style="bold red")
         console.print(Panel(no_internet, title="No Internet Connection", border_style="red", padding=(1, 2), style="bold red on white"))
