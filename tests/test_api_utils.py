@@ -149,9 +149,7 @@ def test_file_system_helper_write_no_payload(tmp_path):
     p = tmp_path / "test.txt"
     assert utils.file_system_helper(str(p), 'write') == False
 
-
 MOCK_PATH = "api.utils.random.randint"
-
 
 @pytest.mark.parametrize("v1, v2, expected_min, expected_max", [
     # Original Test Cases
