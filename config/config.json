@@ -1,9 +1,0 @@
-{
-    "general": {
-        "showInternetStatus": true
-    },
-    "weatherConfig": {
-        "enableWeather": false,
-        "openWeatherMapAPIKey": "your API key here"
-    }
-}
