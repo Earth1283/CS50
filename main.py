@@ -154,7 +154,8 @@ def check_connection() -> None:
 def pass_exsists() -> bool:
     try:
         with open('etc/psswrd.txt', 'r') as f:
-            if len(f.read()) < 8 or len(f.read()) > 72: # pass min len is 8 max 72
+            content = f.read()
+            if len(content) < 8 or len(content) > 72: # pass min len is 8 max 72
                 return False # might as well mk a new one
             else:
                 return True

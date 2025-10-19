@@ -19,3 +19,4 @@ undefined
 /memory
 /applications
 api/__pycache__/logger.cpython-313.pyc
+.coverage
