@@ -35,4 +35,4 @@ jobs:
       # 5. Run CI
       - name: Run tests
         run: |
-            pytest tests/test_api_utils.py
+            pytest
