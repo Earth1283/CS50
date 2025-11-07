@@ -15,7 +15,6 @@ def validate_json(
     Returns:
         `bool`: `True` if the dictionary can be serialized to JSON, `False` otherwise.
     """
-    # import json
     import json
     # validate JSON
     try:
