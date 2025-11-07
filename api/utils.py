@@ -85,6 +85,16 @@ def check_url(
         url:str,
         desiredTimeout:int | None=5
 ) -> bool:
+    """
+
+    Args:
+        url (str): the string for the URI
+        desiredTimeout (int | None, optional): Desired timeout for sending a get request to the URI.
+            Defaults to 5.
+
+    Returns:
+        bool: were we able to fetch the URL?
+    """
     try:
         response = requests.head(url, timeout=desiredTimeout)
 
