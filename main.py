@@ -2,6 +2,7 @@ import getpass
 import threading
 import time
 import os
+from pathlib import Path
 
 import bcrypt
 from rich.traceback import install
@@ -13,6 +14,7 @@ from weather import Weather
 from api.utils import file_system_helper, check_url
 
 install(show_locals=True)
+
 from rich.console import Console
 console = Console()
 from rich import print
@@ -22,6 +24,7 @@ from rich.panel import Panel
 # Define constants for configuration paths
 CONFIG_PATH = "config/config.json"
 DB_PATH = "config/config.db"
+PASSWORD_PATH = Path('etc/psswrd.txt')
 
 def main():
     """
@@ -58,7 +61,7 @@ def handle_password_authentication():
     """
     Handles the password authentication process.
     """
-    with open('etc/psswrd.txt', 'rb') as pswd:
+    with open(PASSWORD_PATH, 'rb') as pswd:
         stored_hash = pswd.read().strip()
     while True:
         try:
@@ -86,12 +89,12 @@ def create_password():
         console.print(dont_worry)
         desired_password = getpass.getpass("Your Password is: ")
         if len(desired_password) < 8:
-            print("[red]Your password does not meet the required safety guidelines of at least 8 chars. Please choose a stronger password.[/red]")
+            print("[red]Your password does not meet the required safety guidelines of at least 8 chars. Please choose a longer password.[/red]")
         elif len(desired_password) > 72:
             print("[red]Your password is too long! Choose a shorter one[/red]")
         else:
             hashed_password = bcrypt.hashpw(desired_password.encode('utf-8'), bcrypt.gensalt(14))
-            with open('etc/psswrd.txt', 'w') as file:
+            with open(PASSWORD_PATH, 'w') as file:
                 file.write(str(hashed_password)) # force it back to a str
             break
 
@@ -152,7 +155,7 @@ def check_connection() -> None:
 
 def pass_exsists() -> bool:
     try:
-        with open('etc/psswrd.txt', 'r') as f:
+        with open(PASSWORD_PATH, 'r') as f:
             content = f.read()
             if len(content) < 8 or len(content) > 72: # pass min len is 8 max 72
                 return False # might as well mk a new one
@@ -162,7 +165,7 @@ def pass_exsists() -> bool:
     except FileNotFoundError:
         # something bad happened lol
         os.makedirs("etc")
-        if not file_system_helper("etc/psswrd.txt", "touch"):
+        if not file_system_helper(PASSWORD_PATH, "touch"):
             raise OSError("Bad API? File creation error?")
 
     return False
