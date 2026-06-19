@@ -154,11 +154,14 @@ def check_connection() -> None:
         console.print(Panel(no_internet, title="No Internet Connection", border_style="red", padding=(1, 2), style="bold red on white"))
 
 def pass_exsists() -> bool:
+    """
+    Checks for a password file, returns true if it exists, false it not.
+    """
     try:
         with open(PASSWORD_PATH, 'r') as f:
             content = f.read()
-            if len(content) < 8 or len(content) > 72: # pass min len is 8 max 72
-                return False # might as well mk a new one
+            if len(content) < 8 or len(content) > 72: # check if the password exceeds limits
+                return False # we will ask the user for a new password if that is the case
             else:
                 return True
 
